@@ -9,7 +9,11 @@ export function useRemote<TData>(url: string, fakeData?: TData) {
       Promise.resolve(fakeData).then(p => setData(p));
     } else {
       fetch(url).then((response) => {
-        console.log(response);
+        if(response.ok) {
+          response
+              .json()
+              .then(setData);
+        }
       });
     }
   }, []);
