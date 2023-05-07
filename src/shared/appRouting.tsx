@@ -39,7 +39,7 @@ export function AppRouting() {
         <Route path={ClientRoutes.Filter}>
             <Filter/>
         </Route>
-        <Route path={ClientRoutes.View}>
+        <Route path={ClientRoutes.Home}>
             <View/>
         </Route>
     </Switch>
