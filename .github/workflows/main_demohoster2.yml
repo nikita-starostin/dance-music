@@ -44,5 +44,5 @@ jobs:
         with:
           app-name: 'demohoster2'
           slot-name: 'Production'
-          package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/dist
+          package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4A0A9C1956DF473A9A63B437FF96F996 }}
