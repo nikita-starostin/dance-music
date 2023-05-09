@@ -7,7 +7,7 @@ export async function test(context: InvocationContext, request: HttpRequest): Pr
 
     return {
         body: {
-            message: `Hello test ${name}!`
+            message: `Hello ${name}!`
         }
     };
 };
