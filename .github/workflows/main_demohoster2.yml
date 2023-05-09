@@ -9,6 +9,7 @@ on:
       - main
     paths:
       - 'api/azureFunctions/**'
+      - '.github/workflows/main_demohoster2.yml'
   workflow_dispatch:
 
 env:
