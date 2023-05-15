@@ -12,7 +12,7 @@ on:
 
 jobs:
   call-build-and-deploy-react-app:
-    uses: ./.github/workflows/baseBuildAndDeployReactApp.yml
+    uses: ./.github/workflows/reactAppBaseBuildAndDeploy.yml
     with:
       app_location: "/UI"
       output_location: "dist"
