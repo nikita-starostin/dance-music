@@ -15,7 +15,6 @@ on:
     secrets:
       AZUREAPPSERVICE_PUBLISHPROFILE:
         required: true
-        type: string
 
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: ${{inputs.source}} # set this to the path to your web app project, defaults to the repository root
