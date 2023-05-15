@@ -118,11 +118,27 @@ resource uiClientSWALinkedApi 'Microsoft.Web/staticSites/linkedBackends@2022-09-
   }
 }
 
+var musicsaName = '${environment}musicsa'
+resource musicStorageAccount 'Microsoft.Storage/storageAccounts@2022-09-01' = {
+  name: musicsaName
+  location: location
+  sku: {
+    name: 'Standard_LRS'
+  }
+  kind: 'StorageV2'
+  properties: {
+    supportsHttpsTrafficOnly: true
+    defaultToOAuthAuthentication: true
+  }
+}
+
 resource blobService 'Microsoft.Storage/storageAccounts/blobServices@2022-09-01' = {
-  name: '${environment}blobService'
+  name: 'default'
+  parent: musicStorageAccount
 }
 
 resource blobContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2022-09-01' = {
-  name: '${environment}musicBlobStorageContainer'
+  name: 'tracks'
   parent: blobService
 }
+
