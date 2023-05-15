@@ -10,7 +10,7 @@ on:
       - 'deploy/azureResources.bicep'
 
 jobs:
-  call-deploy-azure-resources:
+  call:
     uses: ./.github/workflows/azureResourcesBaseDeploy.yml
     with:
       environment: 'dev'

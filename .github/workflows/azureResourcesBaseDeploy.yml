@@ -33,6 +33,6 @@ jobs:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: ${{inputs.environment}}
           template: ./deploy/azureResources.bicep
-          parameters: 'environment=${{ inputs.environment }}'
+          parameters: 'environment=${{ inputs.environment }} hostingPlanLocation=eastus'
           failOnStdErr: false
 

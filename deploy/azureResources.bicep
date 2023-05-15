@@ -1,6 +1,9 @@
 ﻿@description('Name of the environment use as prefix for all resources and group name')
 param environment string
 
+@description('hosting plan location, due to limitations of subscriptions it can be different')
+param hostingPlanLocation string
+
 @description('location for all resources')
 param location string = resourceGroup().location
 
@@ -28,7 +31,6 @@ resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
   }
 }
 
-var hostingPlanLocation = 'eastus'
 resource demohosterHostingPlan 'Microsoft.Web/serverfarms@2021-03-01' = {
   name: '${environment}-demohoster2-hosting-plan'
   location: hostingPlanLocation

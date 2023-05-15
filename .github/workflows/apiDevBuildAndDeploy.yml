@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  call-build-and-deploy-js-azure-function:
+  call:
     uses: ./.github/workflows/apiBaseBuildAndDeploy.yml
     with:
       appName: 'dev-demohoster2'

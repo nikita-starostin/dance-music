@@ -11,7 +11,7 @@ on:
     workflow_dispatch:
 
 jobs:
-  call-build-and-deploy-react-app:
+  call:
     uses: ./.github/workflows/reactAppBaseBuildAndDeploy.yml
     with:
       app_location: "/UI"
