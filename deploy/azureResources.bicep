@@ -4,7 +4,7 @@ param environment string
 @description('location for all resources')
 param location string = resourceGroup().location
 
-var demohosterSAName = '${environment}demohoster2storageaccount'
+var demohosterSAName = '${environment}demohoster2sa'
 resource demohosterSA 'Microsoft.Storage/storageAccounts@2022-09-01' = {
   name: demohosterSAName
   location: location
@@ -17,4 +17,3 @@ resource demohosterSA 'Microsoft.Storage/storageAccounts@2022-09-01' = {
     defaultToOAuthAuthentication: true
   }
 }
-
