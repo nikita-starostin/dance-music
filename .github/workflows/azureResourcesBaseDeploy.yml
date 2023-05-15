@@ -27,19 +27,6 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: create resource group if not exists
-        uses: Azure/CLI@v1
-        with:
-          inlineScript: |
-            #!/bin/bash
-            if [ $(az group exists --name inputs.environment) = false ]; then
-              echo "Azure resource group ${{inputs.environment}} not exists"
-              az group create --name ${{ inputs.environment }} --location eastus2
-              echo "Azure resource group ${{inputs.environment}} created"
-            else
-              echo "Azure resource group ${{inputs.environment}} already exists"
-            fi
-
       - name: deploy
         uses: azure/arm-deploy@v1
         with:
