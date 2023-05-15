@@ -58,6 +58,7 @@ app.http('uploadTracks', {
         for (const file of tracks) {
             if(!!file.file) {
                 const blockBlobClient = containerClient.getBlockBlobClient(file.file.filename);
+                console.log(blockBlobClient.url);
                 await blockBlobClient.uploadData(file.file.data);
             }
         }
