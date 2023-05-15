@@ -1,4 +1,4 @@
-﻿name: Prod - UI - Build and deploy react app to static web app
+﻿name: React App - Dev - Build and deploy
 
 on:
   push:
@@ -6,8 +6,8 @@ on:
       - main
     paths:
       - 'UI/**'
-      - '.github/workflows/devUIBuildAndDeploy.yml'
-      - '.github/workflows/baseBuildAndDeployReactApp.yml'
+      - '.github/workflows/reactAppDevBuildAndDeploy.yml'
+      - '.github/workflows/reactAppBaseBuildAndDeploy.yml'
     workflow_dispatch:
 
 jobs:
