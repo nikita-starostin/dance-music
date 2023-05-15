@@ -27,3 +27,13 @@ resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
     Request_Source: 'rest'
   }
 }
+
+resource demohosterHostingPlan 'Microsoft.Web/serverfarms@2021-03-01' = {
+  name: '${environment}-demohoster2-hosting-plan'
+  location: location
+  sku: {
+    name: 'Y1'
+    tier: 'Dynamic'
+  }
+  properties: {}
+}
