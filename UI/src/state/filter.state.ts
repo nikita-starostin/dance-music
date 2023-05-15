@@ -1,5 +1,5 @@
 ﻿import {DanceType} from "../models";
-import {IAppState, useAppState, UseStateObject} from "../shared/useAppState";
+import {IAppState} from "./useAppState";
 
 export interface IFilter {
     danceType: DanceType;
@@ -24,11 +24,3 @@ export class FilterState implements IAppState<IFilter> {
 }
 
 export const filterState = new FilterState();
-
-export function useFilterStateEdit(): UseStateObject<IFilter> {
-    return useAppState(filterState);
-}
-
-export function useFilterStateReadonly(): IFilter {
-    return filterState.get();
-}

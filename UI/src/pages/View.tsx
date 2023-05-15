@@ -1,4 +1,4 @@
-﻿import {useRemote} from "../shared/useRemote";
+﻿import {useRemote} from "../api/useRemote";
 import {ITrack} from "../models";
 import {FakeTracks} from "../constants";
 

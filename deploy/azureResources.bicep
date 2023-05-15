@@ -86,6 +86,10 @@ resource demohosterFA 'Microsoft.Web/sites@2022-09-01' = {
           name: 'WEBSITE_RUN_FROM_PACKAGE'
           value: '1'
         }
+        {
+          name: 'BlobContainerName'
+          value: blobContainer.name
+        }
       ]
       ftpsState: 'FtpsOnly'
       minTlsVersion: '1.2'

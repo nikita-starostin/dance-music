@@ -1,5 +1,5 @@
 ﻿import {ILocaleStrings} from "../shared/localization/ILocaleStrings";
-import {IAppState} from "../shared/useAppState";
+import {IAppState} from "./useAppState";
 import {getEn} from "../shared/localization/en";
 import {getRu} from "../shared/localization/ru";
 

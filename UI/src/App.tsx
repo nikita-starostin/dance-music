@@ -4,7 +4,8 @@ import {Link, useLocation} from 'wouter';
 import {FaFilter, FaUser} from "react-icons/fa";
 import {AppRouting} from "./shared/appRouting";
 import {initSetLocation} from "./state/wouter.state";
-import {useRemote} from "./shared/useRemote";
+import {useRemote} from "./api/useRemote";
+import {Urls} from "./api/urls";
 
 
 export default function App() {
@@ -12,9 +13,10 @@ export default function App() {
     useEffect(() => {
         initSetLocation(setLocation);
     }, []);
-    const {data} = useRemote("api/test");
-    console.log('app rendered, next line is data:');
-    console.log(data);
+    const {data: testData} = useRemote("api/test");
+    const {data: tracks} = useRemote(Urls.Env);
+    console.log('testData', testData);
+    console.log('tracks', tracks);
 
     return (
         <>

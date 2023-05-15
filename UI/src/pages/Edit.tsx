@@ -1,24 +1,23 @@
-﻿import {DragEventHandler, useEffect, useState} from "react";
+﻿import {DragEventHandler, useCallback, useEffect, useRef, useState} from "react";
 import {ITrack} from "../models";
 import TracksEdit from "../shared/components/TracksEdit";
-import {useRemote} from "../shared/useRemote";
+import {useRemote} from "../api/useRemote";
 import {FakeTracks} from "../constants";
-import {useFilterStateReadonly} from "../state/filter.state";
+import {filterState} from "../state/filter.state";
 
 export default function Edit() {
-    console.log('render');
     const [canRender, setCanRender] = useState(false);
     useEffect(() => {
         const allowed = prompt('Password?') === 'joi';
         setCanRender(allowed);
     }, []);
-    const {data} = useRemote<ITrack[]>('', FakeTracks);
     const [tracks, setTracks] = useState<ITrack[]>([]);
-    useEffect(() => {
-        setTracks(data || []);
-    }, [data]);
 
-    const filter = useFilterStateReadonly();
+    const filter = useRef(filterState.get());
+
+    const uploadTracks = useCallback(async () => {
+
+    }, [tracks]);
 
     const onFilesDrop: DragEventHandler = (e) => {
         e.preventDefault();
@@ -41,9 +40,9 @@ export default function Edit() {
                 id: p.name,
                 title: p.name,
                 src: p.name,
-                danceType: filter.danceType,
-                tags: filter.tags,
-                artist: filter.artist,
+                danceType: filter.current.danceType,
+                tags: filter.current.tags,
+                artist: filter.current.artist,
             }))]);
     };
 
@@ -53,6 +52,7 @@ export default function Edit() {
 
     return (
         <div className="p-5">
+            <button onClick={uploadTracks}>Upload</button>
             <div className="border-dashed border-2 p-5" onDrop={onFilesDrop} onDragOver={e => {
                 e.preventDefault();
                 console.log('drag over');
