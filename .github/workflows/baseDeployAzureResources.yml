@@ -35,7 +35,7 @@ jobs:
             #!/bin/bash
             if [ $(az group exists --name inputs.environment) = false ]; then
               echo "Azure resource group ${{inputs.environment}} not exists"
-              az group create --name ${{ inputs.environment }} --location eastus
+              az group create --name ${{ inputs.environment }} --location eastus2
               echo "Azure resource group ${{inputs.environment}} created"
             else
               echo "Azure resource group ${{inputs.environment}} already exists"
