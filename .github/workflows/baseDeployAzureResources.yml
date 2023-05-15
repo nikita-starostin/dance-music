@@ -43,4 +43,4 @@ jobs:
         with:
           azcliversion: 2.0.72
           inlineScript: |
-            az deployment create --template-file ./deploy/azureResources.bicep --parameters environment=${{ inputs.environment }} --confirm-with-what-if
+            az deployment create --location eastus --template-file ./deploy/azureResources.bicep --parameters environment=${{ inputs.environment }} --confirm-with-what-if
