@@ -38,7 +38,7 @@ resource demohosterHostingPlan 'Microsoft.Web/serverfarms@2021-03-01' = {
   properties: {}
 }
 
-var demohosterFAName = '${environment}-demohoster2'
+var demohosterFAName = '${environment}-demohoster2-function-app'
 resource demohosterFA 'Microsoft.Web/sites@2022-09-01' = {
   name: demohosterFAName
   location: location
