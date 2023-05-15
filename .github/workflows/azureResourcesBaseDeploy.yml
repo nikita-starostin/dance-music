@@ -1,4 +1,4 @@
-﻿name: _ deploy azure resources from main.bicep
+﻿name: _ deploy azure resources from bicep
 
 on:
   workflow_call:
@@ -6,7 +6,6 @@ on:
       environment:
         description: 'The environment to deploy to'
         required: true
-        default: 'dev'
         type: string
     secrets:
       AZURE_CREDENTIALS:
@@ -17,7 +16,7 @@ on:
         required: true
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: checkout code

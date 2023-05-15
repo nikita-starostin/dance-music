@@ -1,17 +1,17 @@
-﻿name: Dev - Deploy Azure Resources
+﻿name: Azure Resources - Dev - Deploy
 
 on:
   push:
     branches:
       - main
     paths:
-      - '.github/workflows/baseDeployAzureResources.yml'
-      - '.github/workflows/devDeployAzureResources.yml'
+      - '.github/workflows/azureResourcesDevDeploy.yml'
+      - '.github/workflows/azureResourcesBaseDeploy.yml'
       - 'deploy/azureResources.bicep'
 
 jobs:
   call-deploy-azure-resources:
-    uses: ./.github/workflows/baseDeployAzureResources.yml
+    uses: ./.github/workflows/azureResourcesBaseDeploy.yml
     with:
       environment: 'dev'
     secrets:
