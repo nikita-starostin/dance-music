@@ -1,4 +1,4 @@
-name: Build and deploy React App
+name: _ Build and deploy React App
 
 on:
   workflow_call:

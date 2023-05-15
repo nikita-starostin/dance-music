@@ -1,4 +1,4 @@
-name: Build and deploy nodejs azure function from source
+name: _ Build and deploy nodejs azure function from source
 
 on:
   workflow_call:

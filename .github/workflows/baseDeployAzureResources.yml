@@ -1,4 +1,4 @@
-﻿name: deploy azure resources from main.bicep
+﻿name: _ deploy azure resources from main.bicep
 
 on:
   workflow_call:
