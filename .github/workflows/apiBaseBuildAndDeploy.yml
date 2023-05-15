@@ -50,3 +50,4 @@ jobs:
           slot-name: ${{ inputs.slotName }}
           package: ${{env.AZURE_FUNCTIONAPP_PACKAGE_PATH}}
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
+          respect-funcignore: true
