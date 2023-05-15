@@ -92,27 +92,3 @@ resource demohosterFA 'Microsoft.Web/sites@2022-09-01' = {
     httpsOnly: true
   }
 }
-
-var uiClientSWAName =  '${environment}-static-web-app'
-resource uiClientSWA 'Microsoft.Web/staticSites@2022-09-01' = {
-  name: uiClientSWAName
-  location: location
-  sku: {
-    name: 'Standard'
-    tier: 'Standard'
-  }
-  properties: {
-    allowConfigFileUpdates: true
-    provider: 'Custom'
-    enterpriseGradeCdnStatus: 'Disabled'
-  }
-}
-
-resource uiClientSWALinkedApi 'Microsoft.Web/staticSites/linkedBackends@2022-09-01' = {
-  name: '${environment}-${uiClientSWAName}-${demohosterFAName}-linked'
-  parent: uiClientSWA
-  properties: {
-    backendResourceId: demohosterFA.id
-    region: 'Westeurope'
-  }
-}
