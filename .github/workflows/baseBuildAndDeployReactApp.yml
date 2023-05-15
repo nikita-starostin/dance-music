@@ -10,9 +10,6 @@ on:
         required: true
         type: string
     secrets:
-      GITHUB_TOKEN:
-        required: true
-        type: string
       AZURE_STATIC_WEB_APPS_API_TOKEN:
         required: true
         type: string
