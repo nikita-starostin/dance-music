@@ -117,3 +117,7 @@ resource uiClientSWALinkedApi 'Microsoft.Web/staticSites/linkedBackends@2022-09-
     region: hostingPlanLocation
   }
 }
+
+resource blobContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2022-09-01' = {
+  name: '${environment}-musicBlobStorageContainer'
+}
