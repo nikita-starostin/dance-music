@@ -8,6 +8,11 @@ on:
         required: true
         default: 'dev'
         type: string
+    secrets:
+      AZURE_CREDENTIALS:
+        description: 'Azure credentials'
+        required: true
+        type: string
 
 jobs:
   build-and-deploy:
