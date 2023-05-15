@@ -1,19 +1,24 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/azure/functions-action
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy Azure Functions
+name: Build and deploy nodejs azure function from source
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'api/azureFunctions/**'
-      - '.github/workflows/main_demohoster2.yml'
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      appName:
+        required: true
+        type: string
+      source:
+        required: true
+        type: string
+      slotName:
+        required: false
+        type: string
+    secrets:
+      AZUREAPPSERVICE_PUBLISHPROFILE:
+        required: true
+        type: string
 
 env:
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'api/azureFunctions' # set this to the path to your web app project, defaults to the repository root
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: ${{inputs.source}} # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '18.x' # set this to the node version to use (supports 8.x, 10.x, 12.x)
   VERBOSE: true # for debugging purposes
 
@@ -42,7 +47,7 @@ jobs:
         uses: Azure/functions-action@v1
         id: fa
         with:
-          app-name: 'demohoster2'
-          slot-name: 'Production'
+          app-name: ${{ inputs.appName }}
+          slot-name: ${{ inputs.slotName }}
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4A0A9C1956DF473A9A63B437FF96F996 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}

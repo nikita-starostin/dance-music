@@ -1,0 +1,42 @@
+﻿name: deploy azure resources from main.bicep
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: 'The environment to deploy to'
+        required: true
+        default: 'dev'
+        type: string
+
+jobs:
+  build-and-deploy:
+    runs-on: windows-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v3
+
+      - name: login to azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: create resource group if not exists
+        uses: Azure/CLI@v1
+        with:
+          inlineScript: |
+            #!/bin/bash
+            if [ $(az group exists --name inputs.environment) = false ]; then
+              echo "Azure resource group ${{inputs.environment}} not exists"
+              az group create --name ${{ inputs.environment }} --location ${{ inputs.location }}
+              echo "Azure resource group ${{inputs.environment}} created"
+            else
+              echo "Azure resource group ${{inputs.environment}} already exists"
+            fi
+
+      - name: deploy
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.0.72
+          inlineScript: |
+            az deployment create --template-file ./deploy/azureResources.bicep --parameters environment=${{ inputs.environment }} --confirm-with-what-if
