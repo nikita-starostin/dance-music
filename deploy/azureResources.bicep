@@ -28,10 +28,10 @@ resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
   }
 }
 
-var hostinPlanLocation = 'eastus'
+var hostingPlanLocation = 'eastus'
 resource demohosterHostingPlan 'Microsoft.Web/serverfarms@2021-03-01' = {
   name: '${environment}-demohoster2-hosting-plan'
-  location: hostinPlanLocation
+  location: hostingPlanLocation
   sku: {
     name: 'Y1'
   }
@@ -41,7 +41,7 @@ resource demohosterHostingPlan 'Microsoft.Web/serverfarms@2021-03-01' = {
 var demohosterFAName = '${environment}-demohoster2-function-app'
 resource demohosterFA 'Microsoft.Web/sites@2022-09-01' = {
   name: demohosterFAName
-  location: hostinPlanLocation
+  location: hostingPlanLocation
   kind: 'functionapp'
   identity: {
     type: 'SystemAssigned'
@@ -114,6 +114,6 @@ resource uiClientSWALinkedApi 'Microsoft.Web/staticSites/linkedBackends@2022-09-
   parent: uiClientSWA
   properties: {
     backendResourceId: demohosterFA.id
-    region: 'Westeurope'
+    region: hostingPlanLocation
   }
 }
