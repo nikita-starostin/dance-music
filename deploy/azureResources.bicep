@@ -89,8 +89,16 @@ resource demohosterFA 'Microsoft.Web/sites@2022-09-01' = {
           value: '1'
         }
         {
-          name: 'BlobContainerName'
+          name: 'TracksContainerName'
           value: blobContainer.name
+        }
+        {
+          name: 'TracksStorageAccountName'
+          value: musicStorageAccount.name
+        }
+        {
+          name: 'TracksStorageAccountKey'
+          value: musicStorageAccount.listKeys().keys[0].value
         }
       ]
       ftpsState: 'FtpsOnly'
