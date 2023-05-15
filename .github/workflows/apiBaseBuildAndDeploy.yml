@@ -48,5 +48,5 @@ jobs:
         with:
           app-name: ${{ inputs.appName }}
           slot-name: ${{ inputs.slotName }}
-          package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+          package: ${{env.AZURE_FUNCTIONAPP_PACKAGE_PATH}}/../dist
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
