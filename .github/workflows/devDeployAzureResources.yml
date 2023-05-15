@@ -7,7 +7,7 @@ on:
     paths:
       - '.github/workflows/baseDeployAzureResources.yml'
       - '.github/workflows/devDeployAzureResources.yml'
-      - './deploy/azureResources.bicep'
+      - 'deploy/azureResources.bicep'
 
 jobs:
   call-deploy-azure-resources:
