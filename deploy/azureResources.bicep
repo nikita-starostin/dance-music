@@ -118,6 +118,11 @@ resource uiClientSWALinkedApi 'Microsoft.Web/staticSites/linkedBackends@2022-09-
   }
 }
 
+resource blobService 'Microsoft.Storage/storageAccounts/blobServices@2022-09-01' = {
+  name: '${environment}blobService'
+}
+
 resource blobContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2022-09-01' = {
   name: '${environment}musicBlobStorageContainer'
+  parent: blobService
 }
