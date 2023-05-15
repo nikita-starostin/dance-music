@@ -36,3 +36,83 @@ resource demohosterHostingPlan 'Microsoft.Web/serverfarms@2021-03-01' = {
   }
   properties: {}
 }
+
+var demohosterFAName = '${environment}-demohoster2-function-app'
+resource demohosterFA 'Microsoft.Web/sites@2022-09-01' = {
+  name: demohosterFAName
+  location: location
+  kind: 'functionapp'
+  identity: {
+    type: 'SystemAssigned'
+  }
+  properties: {
+    serverFarmId: demohosterHostingPlan.id
+    siteConfig: {
+      appSettings: [
+        {
+          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+          value: applicationInsights.properties.InstrumentationKey
+        }
+        {
+          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+          value: applicationInsights.properties.ConnectionString
+        }
+        {
+          name: 'AzureWebJobsFeatureFlags'
+          value: 'EnableWorkerIndexing'
+        }
+        {
+          name: 'AzureWebJobsSecretStorageType'
+          value: 'files'
+        }
+        {
+          name: 'AzureWebJobsStorage'
+          value: demohosterSA.listKeys().keys[0].value
+        }
+        {
+          name: 'FUNCTIONS_EXTENSION_VERSION'
+          value: '~4'
+        }
+        {
+          name: 'FUNCTIONS_WORKER_RUNTIME'
+          value: 'node'
+        }
+        {
+          name: 'WEBSITE_NODE_DEFAULT_VERSION'
+          value: '~18'
+        }
+        {
+          name: 'WEBSITE_RUN_FROM_PACKAGE'
+          value: '1'
+        }
+      ]
+      ftpsState: 'FtpsOnly'
+      minTlsVersion: '1.2'
+    }
+    httpsOnly: true
+  }
+}
+
+var uiClientSWAName =  '${environment}-static-web-app'
+resource uiClientSWA 'Microsoft.Web/staticSites@2022-09-01' = {
+  name: uiClientSWAName
+  location: location
+  sku: {
+    name: 'Standard'
+    tier: 'Standard'
+  }
+  properties: {
+    allowConfigFileUpdates: true
+    provider: 'Custom'
+    enterpriseGradeCdnStatus: 'Disabled'
+  }
+}
+
+resource uiClientSWALinkedApi 'Microsoft.Web/staticSites/linkedBackends@2022-09-01' = {
+  name: '${environment}-${uiClientSWAName}-${demohosterFAName}-linked'
+  parent: uiClientSWA
+  properties: {
+    backendResourceId: demohosterFA.id
+    region: 'Westeurope'
+  }
+}
