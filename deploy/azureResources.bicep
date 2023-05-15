@@ -17,3 +17,13 @@ resource demohosterSA 'Microsoft.Storage/storageAccounts@2022-09-01' = {
     defaultToOAuthAuthentication: true
   }
 }
+
+resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
+  name: '${environment}-application-insights'
+  location: location
+  kind: 'web'
+  properties: {
+    Application_Type: 'web'
+    Request_Source: 'rest'
+  }
+}
