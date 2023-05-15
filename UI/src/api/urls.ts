@@ -1,3 +1,4 @@
 ﻿export const Urls = {
-    Env: 'api/getEnv'
+    Env: 'api/getEnv',
+    UploadTracks: 'api/uploadTracks',
 }

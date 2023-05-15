@@ -1,12 +1,49 @@
 ﻿import {app, HttpRequest, HttpResponse, InvocationContext} from "@azure/functions";
-import {StorageSharedKeyCredential, BlobServiceClient} from "@azure/storage-blob";
+import {BlobServiceClient, StorageSharedKeyCredential} from "@azure/storage-blob";
+import {parse} from "parse-multipart-data";
+
+interface ITrackCreateModel {
+    file?: {
+        filename: string;
+        type: string;
+        data: Buffer;
+    };
+    title: string;
+    danceType: string;
+    tags: string[]
+    artist: string;
+}
+
+async function extractTracks(request: HttpRequest) {
+    const body = Buffer.from(await request.text());
+    const boundary = request.headers.get('content-type').split('boundary=')[1];
+    const parts = parse(body, boundary);
+    const tracks: Array<Partial<ITrackCreateModel>> = [];
+    for (let i = 0; i < parts.length; ++i) {
+        const index = parts[i].name.split('[')[1].split(']')[0];
+
+        if (!tracks[index]) {
+            tracks[index] = {}
+        }
+
+        if (parts[i].filename) {
+            tracks[index].file = {
+                filename: parts[i].filename,
+                type: parts[i].type,
+                data: parts[i].data
+            }
+        } else {
+            tracks[index][parts[i].name.split('[')[0]] = parts[i].data.toString();
+        }
+    }
+    return tracks;
+}
 
 app.http('uploadTracks', {
     methods: ['PUT'],
     authLevel: 'anonymous',
     handler: async (context: InvocationContext, request: HttpRequest): Promise<HttpResponse> => {
-        const formData = await request.formData();
-        const files = formData.getAll('tracks') as unknown as File[];
+        const tracks = await extractTracks(request);
 
         const storageAccountName = process.env.TracksStorageAccountName;
         const storageAccountKey = process.env.TracksStorageAccountKey;
@@ -18,9 +55,11 @@ app.http('uploadTracks', {
         );
         const containerClient = blobServiceClient.getContainerClient(containerName);
 
-        for (const file of files) {
-            const blockBlobClient = containerClient.getBlockBlobClient(file.name);
-            await blockBlobClient.uploadData(await file.arrayBuffer())
+        for (const file of tracks) {
+            if(!!file.file) {
+                const blockBlobClient = containerClient.getBlockBlobClient(file.file.filename);
+                await blockBlobClient.uploadData(file.file.data);
+            }
         }
 
         return {

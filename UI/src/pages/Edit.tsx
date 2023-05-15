@@ -4,19 +4,32 @@ import TracksEdit from "../shared/components/TracksEdit";
 import {useRemote} from "../api/useRemote";
 import {FakeTracks} from "../constants";
 import {filterState} from "../state/filter.state";
+import {Urls} from "../api/urls";
 
 export default function Edit() {
-    const [canRender, setCanRender] = useState(false);
-    useEffect(() => {
-        const allowed = prompt('Password?') === 'joi';
-        setCanRender(allowed);
-    }, []);
-    const [tracks, setTracks] = useState<ITrack[]>([]);
+    const [canRender, setCanRender] = useState(true);
+    // useEffect(() => {
+    //     const allowed = prompt('Password?') === 'joi';
+    //     setCanRender(allowed);
+    // }, []);
+    const [tracks, setTracks] = useState<any[]>([]);
 
     const filter = useRef(filterState.get());
 
     const uploadTracks = useCallback(async () => {
-
+        const formData = new FormData();
+        for (let i = 0; i < tracks.length; i++) {
+            const track = tracks[i];
+            formData.append(`file[${i}]`, track.file);
+            formData.append(`title[${i}]`, track.title);
+            formData.append(`danceType[${i}]`, track.danceType);
+            formData.append(`tags[${i}]`, track.tags);
+            formData.append(`artist[${i}]`, track.artist);
+        }
+        await fetch(Urls.UploadTracks, {
+            body: formData,
+            method: 'PUT',
+        });
     }, [tracks]);
 
     const onFilesDrop: DragEventHandler = (e) => {
@@ -31,15 +44,10 @@ export default function Edit() {
                 .filter(p => p.kind === 'file')
                 .map(p => p.getAsFile() as File)
 
-        files.forEach((file, i) => {
-            console.log(`… file[${i}].name = ${file.name}`);
-        });
-
         setTracks([...tracks,
             ...files.map(p => ({
-                id: p.name,
+                file: p,
                 title: p.name,
-                src: p.name,
                 danceType: filter.current.danceType,
                 tags: filter.current.tags,
                 artist: filter.current.artist,
