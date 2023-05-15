@@ -30,7 +30,7 @@ resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
 
 resource demohosterHostingPlan 'Microsoft.Web/serverfarms@2021-03-01' = {
   name: '${environment}-demohoster2-hosting-plan'
-  location: location
+  location: eastus
   sku: {
     name: 'Y1'
   }
