@@ -32,8 +32,7 @@ resource demohosterHostingPlan 'Microsoft.Web/serverfarms@2021-03-01' = {
   name: '${environment}-demohoster2-hosting-plan'
   location: location
   sku: {
-    name: 'E64bds_v5',
-    tier: 'Standard'
+    name: 'Y1'
   }
   properties: {}
 }
