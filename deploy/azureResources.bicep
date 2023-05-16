@@ -263,6 +263,12 @@ resource tracksContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/con
   properties: {
     resource: {
       id: tracksContainerName
+      partitionKey: {
+        paths: [
+          '/id'
+        ]
+        kind: 'Hash'
+      }
       indexingPolicy: {
         indexingMode: 'consistent'
         includedPaths: [
