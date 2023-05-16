@@ -2,8 +2,10 @@
 import {BlobServiceClient, StorageSharedKeyCredential} from "@azure/storage-blob";
 import {CosmosClient} from "@azure/cosmos";
 import {parse} from "parse-multipart-data";
+import {v4 as uuidv4} from 'uuid';
 
 interface ITrackCreateModel {
+    id?: string;
     file?: {
         filename: string;
         type: string;
@@ -70,15 +72,14 @@ app.http('uploadTracks', {
         for (const file of tracks) {
             if(!!file.file) {
                 const blockBlobClient = containerClient.getBlockBlobClient(file.file.filename);
-                console.log(blockBlobClient.url);
                 await blockBlobClient.uploadData(file.file.data);
                 await insertOrUpdateTrackToCosmos({
-                    ...file,
                     artist: file.artist || '',
                     danceType: file.danceType || '',
                     tags: file.tags || [],
                     title: file.title || '',
-                    url: blockBlobClient.url
+                    url: blockBlobClient.url,
+                    id: file.id || uuidv4()
                 });
             }
         }
