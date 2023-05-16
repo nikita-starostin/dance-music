@@ -1,25 +1,13 @@
-﻿import { useEffect, useState } from 'react';
+﻿import useSWR from "swr";
 
+function fetchJson(url: string) {
+  return fetch(url).then((res) => res.json());
+}
 
-export function useRemote<TData>(url: string, fakeData?: TData) {
-  const [ loading, setLoading ] = useState(true);
-  const [ data, setData ] = useState<TData | undefined>(undefined);
-  useEffect(() => {
-    if (fakeData) {
-      Promise.resolve(fakeData).then(p => setData(p));
-    } else {
-      fetch(url).then((response) => {
-        if(response.ok) {
-          response
-              .json()
-              .then(setData);
-        }
-      });
-    }
-  }, []);
+export function useRemote<TData>(url: string) {
+  const { data } = useSWR<TData>(url, fetchJson);
 
   return {
-    loading,
     data
   };
 }

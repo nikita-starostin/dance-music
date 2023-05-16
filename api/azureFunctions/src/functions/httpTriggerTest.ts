@@ -1,6 +1,6 @@
 import {app, HttpRequest, HttpResponse, InvocationContext} from "@azure/functions";
 
-app.http('test', {
+app.http('httpTriggerTest', {
     methods: ['GET'],
     authLevel: 'anonymous',
     handler: async (context: InvocationContext, request: HttpRequest): Promise<HttpResponse> => {

@@ -1,8 +1,5 @@
-﻿import {DragEventHandler, useCallback, useEffect, useRef, useState} from "react";
-import {ITrack} from "../models";
+﻿import {DragEventHandler, useCallback, useRef, useState} from "react";
 import TracksEdit from "../shared/components/TracksEdit";
-import {useRemote} from "../api/useRemote";
-import {FakeTracks} from "../constants";
 import {filterState} from "../state/filter.state";
 import {Urls} from "../api/urls";
 
@@ -26,7 +23,7 @@ export default function Edit() {
             formData.append(`tags[${i}]`, track.tags);
             formData.append(`artist[${i}]`, track.artist);
         }
-        await fetch(Urls.UploadTracks, {
+        await fetch(Urls.Tracks, {
             body: formData,
             method: 'PUT',
         });
