@@ -157,7 +157,7 @@ resource blobContainer 'Microsoft.Storage/storageAccounts/blobServices/container
 }
 
 @description('Azure Cosmos DB account name, max length 44 characters')
-param cosmosAccountName string = '${environment}-cosmosaccountname'
+param cosmosAccountName string = '${environment}-cosmosaccount'
 
 @description('The primary region for the Azure Cosmos DB account.')
 param primaryRegion string = 'eastus'
