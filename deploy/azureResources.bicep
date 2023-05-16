@@ -105,15 +105,11 @@ resource demohosterFA 'Microsoft.Web/sites@2022-09-01' = {
           value: cosmosDb.name
         }
         {
-          name: 'CosmosDbKey'
-          value: cosmosAccount.listKeys().primaryMasterKey
-        }
-        {
           name: 'CosmosTracksContainerName'
           value: tracksContainer.name
         }
         {
-          name: 'CosmosDbEndpoint'
+          name: 'CosmosConnectionString'
           value: cosmosAccount.listConnectionStrings().connectionStrings[0].connectionString
         }
       ]

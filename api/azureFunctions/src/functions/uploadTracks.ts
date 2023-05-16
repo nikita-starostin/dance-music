@@ -1,5 +1,6 @@
 ﻿import {app, HttpRequest, HttpResponse, InvocationContext} from "@azure/functions";
 import {BlobServiceClient, StorageSharedKeyCredential} from "@azure/storage-blob";
+import {CosmosClient} from "@azure/cosmos";
 import {parse} from "parse-multipart-data";
 
 interface ITrackCreateModel {
@@ -12,6 +13,7 @@ interface ITrackCreateModel {
     danceType: string;
     tags: string[]
     artist: string;
+    url: string;
 }
 
 async function extractTracks(request: HttpRequest) {
@@ -48,15 +50,14 @@ function getTracksBlobContainerClient() {
         `https://${storageAccountName}.blob.core.windows.net`,
         sharedKeyCredential
     );
-    const containerClient = blobServiceClient.getContainerClient(containerName);
-    return containerClient;
+    return blobServiceClient.getContainerClient(containerName);
 }
 
-function insertOrUpdateTrackToCosmos(track: ITrackCreateModel) {
-    console.log(process.env.CosmosDbName);
-    console.log(process.env.CosmosDbKey);
-    console.log(process.env.CosmosTracksContainerName);
-    console.log(process.env.CosmosDbEndpoint);
+async function insertOrUpdateTrackToCosmos(track: ITrackCreateModel) {
+    const cosmosClient = new CosmosClient(process.env.CosmosConnectionString);
+    const database = cosmosClient.database(process.env.CosmosDbName);
+    const container = database.container(process.env.CosmosTracksContainerName);
+    await container.items.upsert(track);
 }
 
 app.http('uploadTracks', {
@@ -71,12 +72,13 @@ app.http('uploadTracks', {
                 const blockBlobClient = containerClient.getBlockBlobClient(file.file.filename);
                 console.log(blockBlobClient.url);
                 await blockBlobClient.uploadData(file.file.data);
-                insertOrUpdateTrackToCosmos({
+                await insertOrUpdateTrackToCosmos({
                     ...file,
                     artist: file.artist || '',
                     danceType: file.danceType || '',
                     tags: file.tags || [],
-                    title: file.title || ''
+                    title: file.title || '',
+                    url: blockBlobClient.url
                 });
             }
         }
