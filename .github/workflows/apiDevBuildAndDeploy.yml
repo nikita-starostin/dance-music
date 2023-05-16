@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'api/azureFunctions/**'
+      - 'azure-function-app/**'
       - '.github/workflows/apiDevBuildAndDeploy.yml'
       - '.github/workflows/apiBaseBuildAndDeploy.yml'
   workflow_dispatch:
@@ -15,7 +15,7 @@ jobs:
     uses: ./.github/workflows/apiBaseBuildAndDeploy.yml
     with:
       appName: 'dev-demohoster2'
-      source: 'api/azureFunctions'
+      source: 'azure-function-app'
       slotName: 'Production'
     secrets:
       AZUREAPPSERVICE_PUBLISHPROFILE: ${{ secrets.DEV_FA_PUBLISHPROFILE }}
