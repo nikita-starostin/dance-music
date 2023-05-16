@@ -213,7 +213,7 @@ param tracksContainerName string = '${environment}Tracs'
 @minValue(400)
 @maxValue(1000000)
 @description('The throughput for the container')
-param throughput int = 400
+param throughput int = 4000
 
 var consistencyPolicy = {
   Eventual: {
