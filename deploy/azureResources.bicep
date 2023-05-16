@@ -100,6 +100,22 @@ resource demohosterFA 'Microsoft.Web/sites@2022-09-01' = {
           name: 'TracksStorageAccountKey'
           value: musicStorageAccount.listKeys().keys[0].value
         }
+        {
+          name: 'CosmosDbName'
+          value: cosmosDb.name
+        }
+        {
+          name: 'CosmosDbKey'
+          value: cosmosAccount.listKeys().primaryMasterKey
+        }
+        {
+          name: 'CosmosTracksContainerName'
+          value: tracksContainer.name
+        }
+        {
+          name: 'CosmosDbEndpoint'
+          value: cosmosAccount.listConnectionStrings().connectionStrings[0].connectionString
+        }
       ]
       ftpsState: 'FtpsOnly'
       minTlsVersion: '1.2'

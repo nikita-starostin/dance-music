@@ -39,27 +39,45 @@ async function extractTracks(request: HttpRequest) {
     return tracks;
 }
 
+function getTracksBlobContainerClient() {
+    const storageAccountName = process.env.TracksStorageAccountName;
+    const storageAccountKey = process.env.TracksStorageAccountKey;
+    const containerName = process.env.TracksContainerName;
+    const sharedKeyCredential = new StorageSharedKeyCredential(storageAccountName, storageAccountKey);
+    const blobServiceClient = new BlobServiceClient(
+        `https://${storageAccountName}.blob.core.windows.net`,
+        sharedKeyCredential
+    );
+    const containerClient = blobServiceClient.getContainerClient(containerName);
+    return containerClient;
+}
+
+function insertOrUpdateTrackToCosmos(track: ITrackCreateModel) {
+    console.log(process.env.CosmosDbName);
+    console.log(process.env.CosmosDbKey);
+    console.log(process.env.CosmosTracksContainerName);
+    console.log(process.env.CosmosDbEndpoint);
+}
+
 app.http('uploadTracks', {
     methods: ['PUT'],
     authLevel: 'anonymous',
     handler: async (context: InvocationContext, request: HttpRequest): Promise<HttpResponse> => {
         const tracks = await extractTracks(request);
-
-        const storageAccountName = process.env.TracksStorageAccountName;
-        const storageAccountKey = process.env.TracksStorageAccountKey;
-        const containerName = process.env.TracksContainerName;
-        const sharedKeyCredential = new StorageSharedKeyCredential(storageAccountName, storageAccountKey);
-        const blobServiceClient = new BlobServiceClient(
-            `https://${storageAccountName}.blob.core.windows.net`,
-            sharedKeyCredential
-        );
-        const containerClient = blobServiceClient.getContainerClient(containerName);
+        const containerClient = getTracksBlobContainerClient();
 
         for (const file of tracks) {
             if(!!file.file) {
                 const blockBlobClient = containerClient.getBlockBlobClient(file.file.filename);
                 console.log(blockBlobClient.url);
                 await blockBlobClient.uploadData(file.file.data);
+                insertOrUpdateTrackToCosmos({
+                    ...file,
+                    artist: file.artist || '',
+                    danceType: file.danceType || '',
+                    tags: file.tags || [],
+                    title: file.title || ''
+                });
             }
         }
 
