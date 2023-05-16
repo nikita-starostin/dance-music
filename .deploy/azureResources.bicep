@@ -208,7 +208,7 @@ param systemManagedFailover bool = true
 param cosmosDbName string = environment
 
 @description('The name for the container')
-param tracksContainerName string = '${environment}Tracs'
+param tracksContainerName string = '${environment}Tracks'
 
 @minValue(400)
 @maxValue(1000000)
