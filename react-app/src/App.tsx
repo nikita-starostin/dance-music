@@ -1,9 +1,12 @@
 import './App.css';
-import React, {useEffect} from "react";
+import React, {useEffect, useRef} from "react";
 import {Link, useLocation} from 'wouter';
 import {FaFilter, FaUser} from "react-icons/fa";
-import {AppRouting} from "./shared/appRouting";
+import AppRouting from "./appRouting";
 import {initSetLocation} from "./state/wouter.state";
+import {filterState} from "./state/filter.state";
+import {useLocalization} from "./state/localization.state";
+import {DanceTypeTranslations} from "./models";
 
 
 export default function App() {
@@ -11,19 +14,27 @@ export default function App() {
     useEffect(() => {
         initSetLocation(setLocation);
     }, []);
+    const filter = useRef(filterState.get());
+    const { l } = useLocalization();
 
     return (
-        <>
-            <div className="flex p-5 justify-between">
-                <Link to="/filter">
-                    <FaFilter/>
+        <div className="p-5 font-rubik gap-5 flex flex-col text-white h-screen bg-gradient-to-b from-[#4e376c] via-[#222441] to-[#1D1E35]">
+            <div className="flex flex-grow flex-col overflow-hidden">
+                <AppRouting/>
+            </div>
+            <div className="flex gap-4 justify-end items-center">
+                <div className="italic text-lg rounded bg-opacity-30 flex-grow justify-self-start">
+                    {l(DanceTypeTranslations[filter.current.danceType])}
+                </div>
+                <Link to="/filter" >
+                    <div className="p-2 app-attract app-attract-hover">
+                        <FaFilter/>
+                    </div>
                 </Link>
-                <div>
+                <div className="p-2 app-attract app-attract-hover">
                     <FaUser/>
                 </div>
             </div>
-            <hr/>
-            <AppRouting/>
-        </>
+        </div>
     );
 }

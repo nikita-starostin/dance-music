@@ -31,6 +31,12 @@ export class LocalizationState implements IAppState<ILocaleStrings> {
 
 const localizationState = new LocalizationState('ru');
 
-export function useLocalization(): ILocaleStrings {
-    return localizationState.get();
+function translate(key: keyof ILocaleStrings): string {
+    return localizationState.get()[key];
+}
+
+export function useLocalization(): { l: (key: keyof ILocaleStrings) => string } {
+    return {
+        l: translate
+    }
 }

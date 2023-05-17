@@ -1,15 +1,17 @@
 ﻿import {Route, Switch} from "wouter";
-import View from "../pages/View";
-import Edit from "../pages/Edit";
-import Filter from "../pages/Filter";
+import View from "./pages/View";
+import Edit from "./pages/Edit";
+import Filter from "./pages/Filter";
 import React from "react";
-import {navigate} from "../state/wouter.state";
+import {navigate} from "./state/wouter.state";
+import TrackDetails from "./pages/TrackDetails";
 
 const ClientRoutes = {
     Home: '/',
     Filter: '/filter',
     View: '/view',
-    Edit: '/edit'
+    Edit: '/edit',
+    TrackDetails: '/view/:trackId'
 }
 
 export function goToFilter() {
@@ -28,10 +30,13 @@ export function goToHome() {
     navigate(ClientRoutes.Home);
 }
 
-export function AppRouting() {
+export default function AppRouting() {
     return <Switch>
         <Route path={ClientRoutes.View}>
             <View/>
+        </Route>
+        <Route path={ClientRoutes.TrackDetails}>
+            <TrackDetails />
         </Route>
         <Route path={ClientRoutes.Edit}>
             <Edit/>

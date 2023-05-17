@@ -17,7 +17,7 @@ export default function MultiselectControl<TFieldValues extends FieldValues, TNa
 }) {
     const items = value as string[];
     const [tag, setTag] = useState<string>('');
-    const l = useLocalization();
+    const { l } = useLocalization();
 
     return <div>
         <div className="flex items-end gap-1">
@@ -37,7 +37,7 @@ export default function MultiselectControl<TFieldValues extends FieldValues, TNa
                     onClick={() => {
                         onChange([...items, tag]);
                         setTag('');
-                    }}>{l.Add}
+                    }}>{l('Add')}
             </button>
         </div>
         <div className="flex gap-2">

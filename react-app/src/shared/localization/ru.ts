@@ -11,7 +11,7 @@ export const getRu = (): ILocaleStrings => {
         Tango: "Танго",
         Title: "Название",
         VienneseWaltz: "Веннский вальс",
-        Waltz: "Вальс",
+        Waltz: "Медленный Вальс",
         Add: "Добавить",
     };
 

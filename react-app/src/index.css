@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@supports (font-variation-settings: normal) {
+    @font-face {
+        font-family: Rubik;
+        src: url("./assets/fonts/Rubik-VariableFont_wght.ttf");
+        font-weight: 100 900;
+        font-style: normal;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: Rubik;
+        src: url("./assets/fonts/Rubik-Italic-VariableFont_wght.ttf");
+        font-weight: 100 900;
+        font-style: italic;
+        font-display: swap;
+    }
+}
+
+@layer base {
+    .app-attract {
+        @apply rounded bg-gray bg-opacity-30
+    }
+
+    .app-attract-active {
+        @apply bg-opacity-40
+    }
+
+    .app-attract-hover {
+        @apply hover:app-attract-active hover:cursor-pointer
+    }
+}

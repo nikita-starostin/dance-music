@@ -18,7 +18,11 @@ export interface IUpsertTrackModel {
 
 export async function upsertTrack(track: IUpsertTrackModel) {
     const blockBlobClient = TracksBlobContainerClient.getBlockBlobClient(track.file.filename);
-    await blockBlobClient.uploadData(track.file.data);
+    await blockBlobClient.uploadData(track.file.data, {
+        blobHTTPHeaders: {
+            blobContentType: track.file.type
+        }
+    });
     await TracksContainer.items.upsert({
         artist: track.artist || '',
         danceType: track.danceType || '',
