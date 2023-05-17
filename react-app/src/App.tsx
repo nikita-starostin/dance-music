@@ -15,17 +15,21 @@ export default function App() {
         initSetLocation(setLocation);
     }, []);
     const filter = useRef(filterState.get());
-    const { l } = useLocalization();
+    const {l} = useLocalization();
 
     return (
-        <div className="p-5 font-rubik gap-5 flex flex-col text-white h-screen bg-gradient-to-b from-[#4e376c] via-[#222441] to-[#1D1E35]">
+        <div
+            className="p-5 font-rubik gap-5 flex flex-col text-white h-screen bg-gradient-to-b from-[#4e376c] via-[#222441] to-[#1D1E35]">
             <div className="flex gap-4 items-center">
-                <div className="italic text-lg rounded bg-opacity-30">
-                    {l(DanceTypeTranslations[filter.current.danceType])}
-                </div>
-                <Link to="/filter" >
-                    <div className="p-2 app-attract app-attract-hover">
-                        <FaFilter/>
+                <Link to="/filter">
+                    <div className="flex hover:bg-opacity-40 hover:cursor-pointer hover:bg-gray">
+                        <div
+                            className="border-2 border-r-0 rounded-tl rounded-bl box-border border-gray border-opacity-40 border-solid italic px-2 text-lg bg-opacity-30">
+                            {l(DanceTypeTranslations[filter.current.danceType])}
+                        </div>
+                        <div className="p-2 bg-gray bg-opacity-30 rounded-tr rounded-br">
+                            <FaFilter/>
+                        </div>
                     </div>
                 </Link>
                 <div className="p-2 app-attract app-attract-hover">
