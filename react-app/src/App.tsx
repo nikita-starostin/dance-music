@@ -19,11 +19,8 @@ export default function App() {
 
     return (
         <div className="p-5 font-rubik gap-5 flex flex-col text-white h-screen bg-gradient-to-b from-[#4e376c] via-[#222441] to-[#1D1E35]">
-            <div className="flex flex-grow flex-col overflow-hidden">
-                <AppRouting/>
-            </div>
-            <div className="flex gap-4 justify-end items-center">
-                <div className="italic text-lg rounded bg-opacity-30 flex-grow justify-self-start">
+            <div className="flex gap-4 items-center">
+                <div className="italic text-lg rounded bg-opacity-30">
                     {l(DanceTypeTranslations[filter.current.danceType])}
                 </div>
                 <Link to="/filter" >
@@ -34,6 +31,9 @@ export default function App() {
                 <div className="p-2 app-attract app-attract-hover">
                     <FaUser/>
                 </div>
+            </div>
+            <div className="flex flex-grow flex-col overflow-hidden">
+                <AppRouting/>
             </div>
         </div>
     );
