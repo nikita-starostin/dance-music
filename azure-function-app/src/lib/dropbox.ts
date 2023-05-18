@@ -1,6 +1,7 @@
 ﻿import {Dropbox} from "dropbox";
 import {Env} from "./env";
 
+// alternative variant if any issues with blobs for playing music
 export async function uploadFileToDropbox(file: {filename: string, data: Buffer, danceType: string}) {
     try {
         const dbx = new Dropbox({ accessToken: Env.DropboxAccessToken });

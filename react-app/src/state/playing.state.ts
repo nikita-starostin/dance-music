@@ -10,7 +10,7 @@ class PlayingState {
         play: [] as ((event: Event) => void)[],
     }
 
-    playTrack(url: string, options?: {
+    async playTrack(url: string, options?: {
         onEnd?: () => void,
         onPause?: () => void,
         onPlay?: () => void,
@@ -46,11 +46,17 @@ class PlayingState {
         }
 
         this.audio = new Audio(url);
-        this.audio.play();
         this.eventListenersMap.timeupdate.forEach(listener => this.audio.addEventListener('timeupdate', listener));
         this.eventListenersMap.ended.forEach(listener => this.audio.addEventListener('ended', listener));
         this.eventListenersMap.pause.forEach(listener => this.audio.addEventListener('pause', listener));
         this.eventListenersMap.play.forEach(listener => this.audio.addEventListener('play', listener));
+        await this.audio.play();
+    }
+
+    setCurrentTime(time: number) {
+        if (!this.audio.paused) {
+            this.audio.currentTime = time;
+        }
     }
 
     resume() {

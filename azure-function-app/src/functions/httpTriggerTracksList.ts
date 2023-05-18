@@ -1,5 +1,6 @@
 ﻿import {app, HttpRequest, HttpResponse, InvocationContext} from "@azure/functions";
 import {TracksContainer} from "../lib/cosmos";
+import {ITrackModel, IUpsertTrackModel} from "../shared/upsertTrack";
 
 app.http('httpTriggerTracksList', {
     methods: ['GET'],
@@ -8,7 +9,7 @@ app.http('httpTriggerTracksList', {
     handler: async (context: InvocationContext, request: HttpRequest): Promise<HttpResponse> => {
         const danceType = request.query.get('danceType');
         const query = `SELECT TOP 10 * FROM c WHERE c.danceType = '${danceType}'`;
-        const tracksQueryIterator = await TracksContainer.items.query({ query });
+        const tracksQueryIterator = await TracksContainer.items.query<ITrackModel>({ query });
 
         const tracksFeedResponse = await tracksQueryIterator.fetchAll();
 
@@ -16,7 +17,7 @@ app.http('httpTriggerTracksList', {
                 id: p.id,
                 title: p.title,
                 artist: p.artist,
-                url: p.url,
+                url: p.blobContainerUrl,
                 danceType: p.danceType,
                 tags: p.tags
             }));

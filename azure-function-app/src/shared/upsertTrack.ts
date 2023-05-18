@@ -1,6 +1,6 @@
 ﻿import {TracksContainer} from "../lib/cosmos";
 import {v4 as uuidv4} from 'uuid';
-import {uploadFileToDropbox} from "../lib/dropbox";
+import {TracksBlobContainerClient} from "../lib/blob";
 
 export interface IUpsertTrackModel {
     id?: string;
@@ -13,14 +13,23 @@ export interface IUpsertTrackModel {
     danceType?: string;
     tags?: string[]
     artist?: string;
-    url?: string;
+}
+
+export interface ITrackModel {
+    id: string;
+    title: string;
+    artist: string;
+    blobContainerUrl: string;
+    danceType: string;
+    tags: string[]
 }
 
 export async function upsertTrack(track: IUpsertTrackModel) {
-    const url = await uploadFileToDropbox({
-        filename: track.file.filename,
-        data: track.file.data,
-        danceType: track.danceType || 'uknown'
+    const blockBlobClient = TracksBlobContainerClient.getBlockBlobClient(track.file.filename);
+    await blockBlobClient.uploadData(track.file.data, {
+        blobHTTPHeaders: {
+            blobContentType: track.file.type
+        }
     });
 
     await TracksContainer.items.upsert({
@@ -28,7 +37,7 @@ export async function upsertTrack(track: IUpsertTrackModel) {
         danceType: track.danceType || '',
         tags: track.tags || [],
         title: track.title || '',
-        url,
+        blobContainerUrl: blockBlobClient.url,
         id: track.id || uuidv4(),
         contentType: track.file.type
     });
