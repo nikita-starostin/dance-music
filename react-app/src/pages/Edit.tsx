@@ -1,7 +1,8 @@
-﻿import {DragEventHandler, useCallback, useRef, useState} from "react";
+﻿import {DragEventHandler, useCallback, useState} from "react";
 import TracksEdit from "../shared/components/TracksEdit";
-import {filterState} from "../state/filter.state";
+import {filterAtom} from "../state/filter.state";
 import {Urls} from "../api/urls";
+import {useAtomValue} from "jotai";
 
 export default function Edit() {
     const [canRender, setCanRender] = useState(true);
@@ -11,7 +12,7 @@ export default function Edit() {
     // }, []);
     const [tracks, setTracks] = useState<any[]>([]);
 
-    const filter = useRef(filterState.get());
+    const filter = useAtomValue(filterAtom);
 
     const uploadTracks = useCallback(async () => {
         const formData = new FormData();
@@ -45,11 +46,19 @@ export default function Edit() {
             ...files.map(p => ({
                 file: p,
                 title: p.name,
-                danceType: filter.current.danceType,
-                tags: filter.current.tags,
-                artist: filter.current.artist,
+                danceType: filter.danceType,
+                tags: filter.tags,
             }))]);
     };
+
+    const download = () => {
+        const blob = new Blob([tracks[0].file]);
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = tracks[0].title;
+        a.click();
+    }
 
     if (!canRender) {
         return <></>;
@@ -58,6 +67,7 @@ export default function Edit() {
     return (
         <div className="p-5">
             <button onClick={uploadTracks}>Upload</button>
+            <button onClick={download}>Download</button>
             <div className="border-dashed border-2 p-5" onDrop={onFilesDrop} onDragOver={e => {
                 e.preventDefault();
                 console.log('drag over');

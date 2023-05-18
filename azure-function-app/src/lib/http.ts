@@ -46,7 +46,7 @@ import {parse} from "parse-multipart-data";
  * ]
  */
 export async function parseMultipartDataArray<TModel>(request: HttpRequest): Promise<TModel[]> {
-    const body = Buffer.from(await request.text());
+    const body = Buffer.from(await request.arrayBuffer());
     const boundary = request.headers.get('content-type').split('boundary=')[1];
     const parts = parse(body, boundary);
     const items: Array<TModel> = [];

@@ -10,4 +10,6 @@
     Title: string;
     DanceType: string;
     Add: string;
+    AddTag: string;
+    Cancel: string;
 }

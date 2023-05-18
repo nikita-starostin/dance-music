@@ -7,8 +7,7 @@ app.http('httpTriggerTracksUpsert', {
     route: 'tracks',
     authLevel: 'anonymous',
     handler: async (context: InvocationContext, request: HttpRequest): Promise<HttpResponse> => {
-        const tracks = await parseMultipartDataArray<IUpsertTrackModel>(request);
-
+        const tracks = await parseMultipartDataArray(request) as IUpsertTrackModel[];
         for (const track of tracks) {
             if (!!track.file) {
                 await upsertTrack(track);

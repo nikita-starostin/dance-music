@@ -13,6 +13,8 @@ export const getEn = (): ILocaleStrings => {
         VienneseWaltz: "VienneseWaltz",
         Waltz: "Waltz",
         Add: "Add",
+        AddTag: "Add tag",
+        Cancel: "Cancel",
     };
 
     return en;

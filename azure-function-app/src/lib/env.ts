@@ -5,4 +5,5 @@
     CosmosConnectionString: process.env.CosmosConnectionString,
     CosmosDbName: process.env.CosmosDbName,
     CosmosTracksContainerName: process.env.CosmosTracksContainerName,
+    DropboxAccessToken: process.env.DropboxAccessToken,
 }

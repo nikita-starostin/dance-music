@@ -1,16 +1,18 @@
 ﻿import {useRemote} from "../api/useRemote";
 import {ITrack} from "../models";
 import {Urls} from "../api/urls";
-import {useRef, useState} from "react";
-import {filterState} from "../state/filter.state";
+import {useState} from "react";
 import {getUrlWithQueryParams} from "../api/getUrlWithQueryParams";
 import {FaPause, FaPlay, FaStepBackward, FaStepForward} from "react-icons/fa";
 import {playingState} from "../state/playing.state";
+import {useAtomValue} from "jotai";
+import {filterAtom} from "../state/filter.state";
 
 export default function View() {
-    const filter = useRef(filterState.get());
+    const filter = useAtomValue(filterAtom);
     const trackUrl = getUrlWithQueryParams(Urls.Tracks, {
-        danceType: filter.current.danceType,
+        danceType: filter.danceType,
+        tags: filter.tags.join(',')
     })
     const {data: tracks} = useRemote<{ items: ITrack[] }>(trackUrl);
     const [playingTrack, setPlayingTrack] = useState<ITrack | null>(null);
@@ -27,7 +29,7 @@ export default function View() {
     }
 
     const playNextOrFirst = () => {
-        if(!tracks) {
+        if (!tracks) {
             return;
         }
 
@@ -40,7 +42,7 @@ export default function View() {
     }
 
     const playPreviousOrLast = () => {
-        if(!tracks) {
+        if (!tracks) {
             return;
         }
 
@@ -53,7 +55,7 @@ export default function View() {
     }
 
     const resumeOrPlayFirst = () => {
-        if(!tracks) {
+        if (!tracks) {
             return;
         }
 

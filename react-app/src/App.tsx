@@ -1,12 +1,13 @@
 import './App.css';
-import React, {useEffect, useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Link, useLocation} from 'wouter';
 import {FaFilter, FaUser} from "react-icons/fa";
 import AppRouting from "./appRouting";
 import {initSetLocation} from "./state/wouter.state";
-import {filterState} from "./state/filter.state";
 import {useLocalization} from "./state/localization.state";
 import {DanceTypeTranslations} from "./models";
+import {useAtom} from "jotai";
+import {filterAtom} from "./state/filter.state";
 
 
 export default function App() {
@@ -14,7 +15,7 @@ export default function App() {
     useEffect(() => {
         initSetLocation(setLocation);
     }, []);
-    const filter = useRef(filterState.get());
+    const [filter] = useAtom(filterAtom);
     const {l} = useLocalization();
 
     return (
@@ -25,7 +26,8 @@ export default function App() {
                     <div className="flex hover:bg-opacity-40 hover:cursor-pointer hover:bg-gray">
                         <div
                             className="border-2 border-r-0 rounded-tl rounded-bl box-border border-gray border-opacity-40 border-solid italic px-2 text-lg bg-opacity-30">
-                            {l(DanceTypeTranslations[filter.current.danceType])}
+                            {l(DanceTypeTranslations[filter.danceType])}
+                            {filter.tags.length > 0 && `; ${filter.tags.join(',')}`}
                         </div>
                         <div className="p-2 bg-gray bg-opacity-30 rounded-tr rounded-br">
                             <FaFilter/>

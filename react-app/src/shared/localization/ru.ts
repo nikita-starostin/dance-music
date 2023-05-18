@@ -13,6 +13,8 @@ export const getRu = (): ILocaleStrings => {
         VienneseWaltz: "Веннский вальс",
         Waltz: "Медленный Вальс",
         Add: "Добавить",
+        AddTag: "Добавить тег",
+        Cancel: "Отмена",
     };
 
     return ru;
