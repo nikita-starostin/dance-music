@@ -1,6 +1,5 @@
 ﻿import {Route, Switch} from "wouter";
 import View from "./pages/View";
-import Edit from "./pages/Edit";
 import Filter from "./pages/Filter";
 import React from "react";
 import {navigate} from "./state/wouter.state";
