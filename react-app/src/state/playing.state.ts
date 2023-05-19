@@ -1,5 +1,4 @@
-﻿
-class PlayingState {
+﻿class PlayingState {
     private audio = new Audio();
 
     // when doing add event listener need to store reference to listener, to call later remove event listener
@@ -27,9 +26,9 @@ class PlayingState {
         this.eventListenersMap.pause = [];
         this.eventListenersMap.play = [];
 
-        if(options?.onTimeUpdate) {
+        if (options?.onTimeUpdate) {
             this.eventListenersMap.timeupdate.push(() => {
-                if(options?.onTimeUpdate) {
+                if (options?.onTimeUpdate) {
                     options.onTimeUpdate(this.audio.currentTime, this.audio.duration);
                 }
             });
@@ -54,9 +53,7 @@ class PlayingState {
     }
 
     setCurrentTime(time: number) {
-        if (!this.audio.paused) {
-            this.audio.currentTime = time;
-        }
+        this.audio.currentTime = time;
     }
 
     resume() {
