@@ -10,6 +10,7 @@ const ClientRoutes = {
     Home: '/',
     Filter: '/filter',
     View: '/view',
+    Edit: '/edit',
     TrackDetails: '/view/:trackId'
 }
 
@@ -19,6 +20,10 @@ export function goToFilter() {
 
 export function goToView() {
     navigate(ClientRoutes.View);
+}
+
+export function goToEdit() {
+    navigate(ClientRoutes.Edit);
 }
 
 export function goToHome() {
@@ -32,6 +37,9 @@ export default function AppRouting() {
         </Route>
         <Route path={ClientRoutes.TrackDetails}>
             <TrackDetails />
+        </Route>
+        <Route path={ClientRoutes.Edit}>
+            <Edit/>
         </Route>
         <Route path={ClientRoutes.Filter}>
             <Filter/>
