@@ -1,10 +1,10 @@
-﻿import {app, HttpRequest, HttpResponse, InvocationContext} from "@azure/functions";
-import {parseMultipartDataArray} from "../lib/http";
+﻿import {HttpRequest, HttpResponse, InvocationContext} from "@azure/functions";
+import {createFunction, parseMultipartDataArray} from "../lib/http";
 import {IUpsertTrackModel, upsertTrack} from "../shared/upsertTrack";
 
-app.http('httpTriggerTracksUpsert', {
+createFunction('httpTriggerTracksWithFilesUpsert', {
     methods: ['PUT'],
-    route: 'tracks',
+    route: 'tracksWithFiles',
     authLevel: 'anonymous',
     handler: async (context: InvocationContext, request: HttpRequest): Promise<HttpResponse> => {
         const tracks = await parseMultipartDataArray(request) as IUpsertTrackModel[];

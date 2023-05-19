@@ -112,6 +112,10 @@ resource demohosterFA 'Microsoft.Web/sites@2022-09-01' = {
           name: 'CosmosConnectionString'
           value: cosmosAccount.listConnectionStrings().connectionStrings[0].connectionString
         }
+        {
+          name: 'TracksUploadSas'
+          value: musicStorageAccount.listAccountSas().accountSasToken
+        }
       ]
       ftpsState: 'FtpsOnly'
       minTlsVersion: '1.2'

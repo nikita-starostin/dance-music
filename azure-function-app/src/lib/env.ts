@@ -6,4 +6,5 @@
     CosmosDbName: process.env.CosmosDbName,
     CosmosTracksContainerName: process.env.CosmosTracksContainerName,
     DropboxAccessToken: process.env.DropboxAccessToken,
+    TracksUploadSas: process.env.TracksUploadSas,
 }

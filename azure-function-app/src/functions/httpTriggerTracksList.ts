@@ -1,15 +1,16 @@
-﻿import {app, HttpRequest, HttpResponse, InvocationContext} from "@azure/functions";
+﻿import {HttpRequest, HttpResponse, InvocationContext} from "@azure/functions";
 import {TracksContainer} from "../lib/cosmos";
-import {ITrackModel, IUpsertTrackModel} from "../shared/upsertTrack";
+import {ITrackDbModel} from "../shared/upsertTrack";
+import {createFunction} from "../lib/http";
 
-app.http('httpTriggerTracksList', {
+createFunction('httpTriggerTracksList', {
     methods: ['GET'],
     route: 'tracks',
     authLevel: 'anonymous',
     handler: async (context: InvocationContext, request: HttpRequest): Promise<HttpResponse> => {
         const danceType = request.query.get('danceType');
         const query = `SELECT TOP 10 * FROM c WHERE c.danceType = '${danceType}'`;
-        const tracksQueryIterator = await TracksContainer.items.query<ITrackModel>({ query });
+        const tracksQueryIterator = await TracksContainer.items.query<ITrackDbModel>({ query });
 
         const tracksFeedResponse = await tracksQueryIterator.fetchAll();
 

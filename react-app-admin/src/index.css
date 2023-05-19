@@ -21,23 +21,5 @@
 }
 
 @layer base {
-    .app-attract {
-        @apply rounded bg-gray bg-opacity-30
-    }
 
-    .app-attract-active {
-        @apply bg-opacity-40
-    }
-
-    .app-attract-hover {
-        @apply hover:app-attract-active hover:cursor-pointer
-    }
-
-    .btn-secondary {
-        @apply bg-gray text-black rounded py-2 px-4 hover:bg-opacity-40
-    }
-
-    .btn-primary {
-        @apply bg-blue hover:bg-opacity-40 text-white font-bold py-2 px-4 rounded
-    }
 }

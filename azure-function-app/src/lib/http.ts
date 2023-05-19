@@ -1,4 +1,4 @@
-﻿import {HttpRequest} from "@azure/functions";
+﻿import {app, HttpFunctionOptions, HttpRequest, HttpResponse} from "@azure/functions";
 import {parse} from "parse-multipart-data";
 
 /**
@@ -68,4 +68,24 @@ export async function parseMultipartDataArray<TModel>(request: HttpRequest): Pro
         }
     }
     return items;
+}
+
+export const OkResult: HttpResponse = {
+    status: 200
+}
+
+export function createFunction(name: string, options: HttpFunctionOptions) {
+    app.http(name, {
+        ...options,
+        handler: async (context, request) => {
+            try {
+                return await options.handler(context, request);
+            } catch (e) {
+                context.log(e);
+                return {
+                    status: 500,
+                }
+            }
+        }
+    })
 }

@@ -15,7 +15,7 @@ export interface IUpsertTrackModel {
     artist?: string;
 }
 
-export interface ITrackModel {
+export interface ITrackDbModel {
     id: string;
     title: string;
     artist: string;
