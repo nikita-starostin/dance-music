@@ -297,7 +297,7 @@ resource tracksContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/con
           }
         ]
       }
-      defaultTtl: 86400
+      defaultTtl: -1
       uniqueKeyPolicy: {
         uniqueKeys: [
           {
