@@ -40,6 +40,7 @@ resource demohosterHostingPlan 'Microsoft.Web/serverfarms@2021-03-01' = {
   properties: {}
 }
 
+param baseTime string = utcNow('u')
 var demohosterFAName = '${environment}-demohoster2-function-app'
 resource demohosterFA 'Microsoft.Web/sites@2022-09-01' = {
   name: demohosterFAName
@@ -114,7 +115,12 @@ resource demohosterFA 'Microsoft.Web/sites@2022-09-01' = {
         }
         {
           name: 'TracksUploadSas'
-          value: musicStorageAccount.listAccountSas().accountSasToken
+          value: musicStorageAccount.listAccountSas(musicStorageAccount.apiVersion, {
+            signedExpiry: dateTimeAdd(baseTime, 'P1Y')
+            signedPermission: 'w'
+            signedResourceTypes: 's'
+            signedServices: 't'
+          }).accountSasToken
         }
       ]
       ftpsState: 'FtpsOnly'
@@ -159,6 +165,8 @@ resource musicStorageAccount 'Microsoft.Storage/storageAccounts@2022-09-01' = {
   properties: {
     supportsHttpsTrafficOnly: true
     defaultToOAuthAuthentication: true
+    allowBlobPublicAccess: true
+    accessTier: 'Hot'
   }
 }
 
