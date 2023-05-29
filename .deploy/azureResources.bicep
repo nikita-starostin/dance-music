@@ -328,7 +328,7 @@ resource tracksContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/con
 
 param ADLocation string = 'europe'
 resource activeDirectoryB2C 'Microsoft.AzureActiveDirectory/b2cDirectories@2023-01-18-preview' = {
-  name: '${environment}-b2c'
+  name: '${environment}aadb2cd'
   location: ADLocation
   sku: {
     name: 'Standard'
