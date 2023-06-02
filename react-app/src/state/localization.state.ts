@@ -1,42 +1,50 @@
 ﻿import {ILocaleStrings} from "../shared/localization/ILocaleStrings";
-import {IAppState} from "./useAppState";
-import {getEn} from "../shared/localization/en";
 import {getRu} from "../shared/localization/ru";
+import {atom, useAtom} from "jotai";
 
-interface ILocalizationState {
-    localeStrings: ILocaleStrings;
+interface ILocalization {
+    locale: string;
+    strings: ILocaleStrings;
 }
 
-export class LocalizationState implements IAppState<ILocaleStrings> {
-    localeStrings: ILocaleStrings;
-
-    constructor(lang: 'ru' | 'en') {
-        switch (lang) {
-            case 'ru':
-                this.localeStrings = getRu();
-                break;
-            case 'en':
-                this.localeStrings = getEn();
-        }
-    }
-
-    get(): ILocaleStrings {
-        return this.localeStrings;
-    }
-
-    set(newState: ILocaleStrings): void {
-        this.localeStrings = newState;
-    }
-}
-
-const localizationState = new LocalizationState('ru');
-
-function translate(key: keyof ILocaleStrings): string {
-    return localizationState.get()[key];
-}
-
-export function useLocalization(): { l: (key: keyof ILocaleStrings) => string } {
+function getRuLocalization(): ILocalization {
     return {
-        l: translate
+        locale: 'ru',
+        strings: getRu()
+    }
+}
+
+function getEnLocalization(): ILocalization {
+    return {
+        locale: 'en',
+        strings: getRu()
+    }
+}
+
+type AvailableLocalesType = 'ru' | 'en';
+
+function getLocalization(locale: AvailableLocalesType) {
+    switch (locale) {
+        case 'ru':
+            return getRuLocalization();
+        case 'en':
+            return getEnLocalization();
+        default:
+            return getRuLocalization();
+    }
+}
+
+const localizationAtom = atom(getLocalization('ru'))
+
+export function useLocalization(): {
+    l: (key: keyof ILocaleStrings) => string,
+    setLocale: (locale: AvailableLocalesType) => void
+} {
+    const [localization, setLocalization] = useAtom(localizationAtom);
+    return {
+        l: (key: keyof ILocaleStrings) => localization.strings[key],
+        setLocale: (locale: AvailableLocalesType) => {
+            setLocalization(getLocalization(locale));
+        }
     }
 }

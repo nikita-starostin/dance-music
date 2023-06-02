@@ -2,6 +2,14 @@
 
 export const getRu = (): ILocaleStrings => {
     const ru: ILocaleStrings = {
+        Avatar: "Аватар",
+        Name: "Имя",
+        ConfirmPassword: "Подтвердите пароль",
+        SignIn: "Войти",
+        SignUp: "Зарегистрироваться",
+        Email: "Электронная почта",
+        Password: "Пароль",
+        Logout: "Выйти",
         Artist: "Исполнитель",
         DanceType: "Танец",
         Foxtrot: "Фокстрот",

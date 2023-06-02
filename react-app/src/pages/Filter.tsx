@@ -1,11 +1,11 @@
 ﻿import {DanceTypes, DanceTypeTranslations} from "../models";
 import {useCallback, useEffect, useRef} from "react";
-import {filterAtom, IFilter} from "../state/filter.state";
+import {filterAtom} from "../state/filter.state";
 import {Controller, useForm} from "react-hook-form";
 import {useLocalization} from "../state/localization.state";
 import {goToView} from "../appRouting";
 import MultiselectControl from "../shared/components/MultiselectControl";
-import {useAtom, useAtomValue, useSetAtom} from "jotai";
+import {useAtomValue, useSetAtom} from "jotai";
 
 export default function Filter() {
     const setFilter = useSetAtom(filterAtom);
@@ -32,7 +32,7 @@ export default function Filter() {
 
     return <form className="app-attract p-5 flex flex-col gap-3 items-start" onSubmit={handleSubmit(onSubmit)}>
         <div>
-            <label>Танец</label>
+            <label>{l('DanceType')}</label>
             <select {...register('danceType')}
                     className="border border-white text-black text-sm rounded-lg focus:ring-blue-500 w-48 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 {DanceTypes.map(p => {

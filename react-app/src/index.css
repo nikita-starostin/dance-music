@@ -40,4 +40,16 @@
     .btn-primary {
         @apply bg-blue hover:bg-opacity-40 text-white font-bold py-2 px-4 rounded
     }
+
+    .form-field {
+        @apply flex flex-col gap-1
+    }
+
+    .gradient-bg {
+        @apply bg-gradient-to-b from-[#4e376c] via-[#222441] to-[#1D1E35]
+    }
+
+    .fixed-layout-container {
+        @apply flex flex-col fixed h-full w-full items-center justify-center gradient-bg top-0 left-0;
+    }
 }

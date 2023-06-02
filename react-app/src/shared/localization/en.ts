@@ -2,6 +2,14 @@
 
 export const getEn = (): ILocaleStrings => {
     const en: ILocaleStrings = {
+        Avatar: "Avatar",
+        ConfirmPassword: "Confirm password",
+        Name: "Name",
+        SignUp: "Sign up",
+        SignIn: "Sign in",
+        Password: "Password",
+        Email: "Email",
+        Logout: "Logout",
         Artist: "Artist",
         DanceType: "DanceType",
         Foxtrot: "Foxtrot",

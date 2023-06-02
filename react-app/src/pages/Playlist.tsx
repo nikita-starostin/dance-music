@@ -174,7 +174,7 @@ export default function Playlist() {
                     </div>
                 </div>
                 <div className="app-attract rounded-2xl">
-                    {tracks && tracks.items.map(p => {
+                    {tracks?.items && tracks.items.map(p => {
                         return <div key={p.id}
                                     onClick={() => {
                                         audioPlayer.playTrack(p);
