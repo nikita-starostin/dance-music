@@ -119,7 +119,7 @@ class AudioPlayer {
 
 const audioPlayer = new AudioPlayer();
 
-export default function View() {
+export default function Playlist() {
     const filter = useAtomValue(filterAtom);
     const trackUrl = getUrlWithQueryParams(Urls.Tracks, {
         danceType: filter.danceType,

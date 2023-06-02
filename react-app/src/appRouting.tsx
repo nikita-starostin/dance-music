@@ -1,5 +1,5 @@
 ﻿import {Route, Switch} from "wouter";
-import View from "./pages/View";
+import Playlist from "./pages/Playlist";
 import Filter from "./pages/Filter";
 import React from "react";
 import {navigate} from "./state/wouter.state";
@@ -8,8 +8,8 @@ import TrackDetails from "./pages/TrackDetails";
 const ClientRoutes = {
     Home: '/',
     Filter: '/filter',
-    View: '/view',
-    TrackDetails: '/view/:trackId'
+    Playlist: '/playlist',
+    TrackDetails: '/playlist/:trackId'
 }
 
 export function goToFilter() {
@@ -17,7 +17,7 @@ export function goToFilter() {
 }
 
 export function goToView() {
-    navigate(ClientRoutes.View);
+    navigate(ClientRoutes.Playlist);
 }
 
 export function goToHome() {
@@ -26,8 +26,8 @@ export function goToHome() {
 
 export default function AppRouting() {
     return <Switch>
-        <Route path={ClientRoutes.View}>
-            <View/>
+        <Route path={ClientRoutes.Playlist}>
+            <Playlist/>
         </Route>
         <Route path={ClientRoutes.TrackDetails}>
             <TrackDetails />
@@ -36,7 +36,7 @@ export default function AppRouting() {
             <Filter/>
         </Route>
         <Route path={ClientRoutes.Home}>
-            <View/>
+            <Playlist/>
         </Route>
     </Switch>
 }
