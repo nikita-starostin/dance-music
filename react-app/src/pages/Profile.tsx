@@ -2,7 +2,7 @@
 import {useIsAuth} from "../state/auth.state";
 import {useForm} from "react-hook-form";
 import {useLocalization} from "../state/localization.state";
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {FaArrowLeft, FaCheck} from "react-icons/all";
 import {ClientRoutes, goToHome} from "../appRouting";
 import {Link} from "wouter";
@@ -188,6 +188,19 @@ function SignInUpForm() {
 
 export default function Profile() {
     const {isAuth} = useIsAuth();
+
+    // on backspace go home
+    useEffect(() => {
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Backspace') {
+                goToHome();
+            }
+        }
+        document.addEventListener('keydown', onKeyDown);
+        return () => {
+            document.removeEventListener('keydown', onKeyDown);
+        }
+    });
 
     return isAuth ? <ProfileInfo/> : <SignInUpForm/>;
 }
