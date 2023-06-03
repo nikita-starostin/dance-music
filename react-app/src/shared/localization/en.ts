@@ -2,6 +2,7 @@
 
 export const getEn = (): ILocaleStrings => {
     const en: ILocaleStrings = {
+        Saved: "Saved",
         Avatar: "Avatar",
         ConfirmPassword: "Confirm password",
         Name: "Name",

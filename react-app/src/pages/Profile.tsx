@@ -2,29 +2,51 @@
 import {useIsAuth} from "../state/auth.state";
 import {useForm} from "react-hook-form";
 import {useLocalization} from "../state/localization.state";
-import {useState} from "react";
-import {FaArrowLeft} from "react-icons/all";
+import {useRef, useState} from "react";
+import {FaArrowLeft, FaCheck} from "react-icons/all";
 import {ClientRoutes, goToHome} from "../appRouting";
 import {Link} from "wouter";
 
+function useShowSavedForAWhile() {
+    const [savedVisible, setSavedVisible] = useState(false);
+    const timeoutRef = useRef<number | null>(null);
+    const setVisibileTrueForAWhile = () => {
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
+        setSavedVisible(true);
+        timeoutRef.current = setTimeout(() => {
+            setSavedVisible(false)
+            timeoutRef.current = null;
+        }, 3000);
+    }
+    return {savedVisible, setVisibileTrueForAWhile};
+}
+
 function ProfileInfo() {
-    const {profile} = useProfile();
+    const {profile, setProfile} = useProfile();
     const [avatarLoaded, setAvatarLoaded] = useState(false);
+    const {savedVisible, setVisibileTrueForAWhile} = useShowSavedForAWhile();
     const {l} = useLocalization();
     const {logout} = useIsAuth();
-    const {register, getValues} = useForm<IProfile>({
+    const {register, getValues, handleSubmit} = useForm<IProfile>({
         defaultValues: profile,
     });
 
+    const updateProfile = (data: IProfile) => {
+        setVisibileTrueForAWhile();
+        setProfile(data);
+    };
+
     return <div data-visible={avatarLoaded}
-        className="fixed-layout-container data-[visible=false]:hidden data-[visible=true]:visible">
+                className="fixed-layout-container data-[visible=false]:hidden data-[visible=true]:visible">
         <div className="flex gap-2 flex-col">
             <Link to={ClientRoutes.Home}>
                 <div role="button" className="cursor-pointer text-2xl">
                     <FaArrowLeft/>
                 </div>
             </Link>
-            <form className="flex flex-col gap-2 app-attract p-5">
+            <form onSubmit={handleSubmit(updateProfile)} className="flex flex-col gap-2 app-attract p-5">
                 <div className="form-field">
                     <label>{l('Name')}</label>
                     <input className="text-black px-4 py-2" type="text" {...register('name')} />
@@ -40,8 +62,14 @@ function ProfileInfo() {
                 <img src={getValues('avatar')} onLoad={() => {
                     setAvatarLoaded(true);
                 }} alt={'Avatar image not found'}/>
-                <div className="flex gap-2">
-                    <button className="btn-primary">{l('Save')}</button>
+                <div className="flex gap-2 items-start">
+                    <div className="flex flex-col gap-2">
+                        <button className="btn-primary">{l('Save')}</button>
+                        {savedVisible && <div className="flex gap-2 items-center text-success animate-fadeOut">
+                            <span>{l('Saved')}</span>
+                            <FaCheck/>
+                        </div>}
+                    </div>
                     <button className="btn-secondary" type="button" onClick={logout}>{l('Logout')}</button>
                 </div>
             </form>

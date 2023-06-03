@@ -2,6 +2,7 @@
 
 export const getRu = (): ILocaleStrings => {
     const ru: ILocaleStrings = {
+        Saved: "Сохранено",
         Avatar: "Аватар",
         Name: "Имя",
         ConfirmPassword: "Подтвердите пароль",

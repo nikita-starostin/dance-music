@@ -1,4 +1,5 @@
 ﻿export interface ILocaleStrings {
+    Saved: string;
     Avatar: string;
     ConfirmPassword: string;
     Name: string;
