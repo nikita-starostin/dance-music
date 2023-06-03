@@ -6,8 +6,8 @@ export interface ITab {
     label: string;
 }
 
-export default function Tabs({tabs}:{tabs: ITab[]}) {
-   const [activeTab, setActiveTab] = useState(tabs[0]);
+export default function Tabs({tabs, initialIndex}:{tabs: ITab[], initialIndex?: number}) {
+   const [activeTab, setActiveTab] = useState(tabs[initialIndex || 0]);
    const ActiveTabComponent = activeTab.component;
 
    return <>

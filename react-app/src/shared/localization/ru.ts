@@ -2,6 +2,21 @@
 
 export const getRu = (): ILocaleStrings => {
     const ru: ILocaleStrings = {
+        TracksCount: "Количество треков",
+        AverateTrackDurationS: "Средняя длительность трека (секунды)",
+        TotalPlaylistDurationS: "Общая длительность плейлиста (секунды)",
+        Rating: "Рейтинг",
+        Collections: "Коллекции",
+        ListenedBefore: "Слушал раньше",
+        Yes: "Да",
+        No: "Нет",
+        ListenedLastWeek: "Прослушано за последнюю неделю",
+        Tiers: "Уровни",
+        Artists: "Исполнители",
+        Premium: "Премиум",
+        Free: "Бесплатно",
+        AllPossibleItemsSelected: "Выбраны все возможные элементы",
+        Enabled: "Включено",
         DancesKind: "Вид танцев",
         Dance: "Танец",
         SingleDance: "Одиночный танец",

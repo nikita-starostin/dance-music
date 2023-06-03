@@ -2,6 +2,21 @@
 
 export const getEn = (): ILocaleStrings => {
     const en: ILocaleStrings = {
+        TracksCount: "Tracks count",
+        AverateTrackDurationS: "Averate track duration (seconds)",
+        TotalPlaylistDurationS: "Total playlist duration (seconds)",
+        Rating: "Rating",
+        Collections: "Collections",
+        ListenedBefore: "Listened before",
+        Yes: "Yes",
+        No: "No",
+        ListenedLastWeek: "Listened last week",
+        Tiers: "Tiers",
+        Artists: "Artists",
+        Free: "Free",
+        Premium: "Premium",
+        AllPossibleItemsSelected: "All possible items selected",
+        Enabled: "Enabled",
         DancesKind: "Dances kind",
         Dance: "Dance",
         SingleDance: "Single dance",

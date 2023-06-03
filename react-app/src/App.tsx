@@ -11,6 +11,18 @@ import {useProfile} from "./api/hooks/useProfile";
 import {useIsAuth} from "./state/auth.state";
 import {TrackDanceTypeTranslations} from "./constants";
 
+function useTimeoutToInitJotaiFromLocalStorage() {
+    const [isInit, setIsInit] = useState(false);
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setIsInit(true);
+        }, 500);
+        return () => {
+            clearTimeout(timeout);
+        };
+    }, []);
+    return isInit;
+}
 
 export default function App() {
     const [, setLocation] = useLocation();
@@ -21,8 +33,9 @@ export default function App() {
     const {l} = useLocalization();
     const {profile} = useProfile();
     const {isAuth} = useIsAuth();
+    const isInit = useTimeoutToInitJotaiFromLocalStorage();
 
-    return (
+    return !isInit ? <></> : (
         <div
             className="p-5 font-rubik gap-5 flex flex-col text-white h-screen gradient-bg">
             <div className="flex gap-4 justify-between">

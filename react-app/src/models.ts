@@ -24,3 +24,23 @@ export interface ITrack {
     tags: string[];
     artist: string;
 }
+
+export enum Tier {
+    Free = 'free',
+    Premium = 'premium'
+}
+
+export enum Tags {
+    Ru = 'ru',
+    En = 'en',
+}
+
+export enum ListenedBefore {
+    Yes = 'yes',
+    No = 'no',
+    LastWeek = 'lastWeek',
+}
+
+export enum Artist {
+    DjMaksy = "DjMaksy"
+}

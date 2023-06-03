@@ -1,4 +1,19 @@
 ﻿export interface ILocaleStrings {
+    TracksCount: string;
+    AverateTrackDurationS: string;
+    TotalPlaylistDurationS: string;
+    Rating: string;
+    Collections: string;
+    ListenedBefore: string;
+    Yes: string;
+    No: string;
+    ListenedLastWeek: string;
+    Artists: string;
+    Tiers: string;
+    Free: string;
+    Premium: string;
+    AllPossibleItemsSelected: string;
+    Enabled: string;
     DancesKind: string;
     Dance: string;
     SingleDance: string;

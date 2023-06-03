@@ -1,10 +1,11 @@
-﻿import {DancePattern, DanceType, TrackDanceType} from "./models";
+﻿import {DancePattern, DanceType, ListenedBefore, Tier, TrackDanceType} from "./models";
 import {ILocaleStrings} from "./shared/localization/ILocaleStrings";
 
 export const LocalStorageKeys = {
     Auth: 'auth',
     Profile: 'profile',
-    Profiles: 'profiles'
+    Profiles: 'profiles',
+    Filter: 'filter'
 }
 
 export const TrackDanceTypesByDanceType: Record<DanceType, TrackDanceType[]> = {
@@ -50,3 +51,14 @@ export const TrackDanceTypeTranslations: Record<TrackDanceType, keyof ILocaleStr
     [TrackDanceType.VienneseWaltz]: 'VienneseWaltz',
     [TrackDanceType.Quickstep]: 'Quickstep',
 };
+
+export const TiersTranslations: Record<Tier, keyof ILocaleStrings> = {
+    [Tier.Free]: 'Free',
+    [Tier.Premium]: 'Premium',
+}
+
+export const ListenedBeforeTranslations: Record<ListenedBefore, keyof ILocaleStrings> = {
+    [ListenedBefore.Yes]: 'Yes',
+    [ListenedBefore.No]: 'No',
+    [ListenedBefore.LastWeek]: 'ListenedLastWeek',
+}
