@@ -27,7 +27,7 @@ class AudioPlayer {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     private setPlaying: (playing: boolean) => void = () => {
     };
-    private tracks?: { items: ITrack[]};
+    private tracks?: { items: ITrack[] };
     private playingTrack: ITrack | null = null;
 
     updateStates = (
@@ -35,7 +35,7 @@ class AudioPlayer {
         setCurrentTrackTime: (time: number) => void,
         setDuration: (duration: number) => void,
         setPlaying: (playing: boolean) => void,
-        tracks: {items: ITrack[]} | undefined,
+        tracks: { items: ITrack[] } | undefined,
         playingTrack: ITrack | null
     ) => {
         this.setPlayingTrack = setPlayingTrack;
@@ -135,11 +135,14 @@ export default function Playlist() {
         <div className="overflow-auto flex flex-col flex-grow max-h-screen">
             <div className="flex flex-grow gap-4">
                 <div
-                    className="flex-grow flex flex-col rounded-2xl px-5 pt-5 bg-[url('https://img.freepik.com/premium-vector/space-background-with-stars-vector-illustration_97886-319.jpg')]">
+                    className="flex-grow flex flex-col rounded-2xl">
                     <div className="flex flex-col h-full items-center">
-                        <div className="flex flex-col flex-grow h-full">
-                            <img className="h-96 w-full" src="https://thumbs.dreamstime.com/b/waltz-dance-514176.jpg"
-                                 alt="logo"/>
+                        <div
+                            className="flex flex-col flex-grow h-full w-full bg-[url('https://img.freepik.com/premium-vector/space-background-with-stars-vector-illustration_97886-319.jpg')]">
+                            <div className="flex h-full w-full justify-center items-center">
+                                <img className="h-96" src="https://thumbs.dreamstime.com/b/waltz-dance-514176.jpg"
+                                     alt="logo"/>
+                            </div>
                         </div>
                         <div className="h-[120px] w-full">
                             <div className="h-[30px] text-lg">
@@ -173,21 +176,24 @@ export default function Playlist() {
                         </div>
                     </div>
                 </div>
-                <div className="app-attract rounded-2xl">
-                    {tracks?.items && tracks.items.map(p => {
-                        return <div key={p.id}
-                                    onClick={() => {
-                                        audioPlayer.playTrack(p);
-                                    }}
-                                    data-playing={playingTrack?.id === p.id}
-                                    className="data-[playing=true]:bg-opacity-40 data-[playing=true]:bg-gray first:rounded-tr-2xl first:rounded-tl-2xl p-2 flex justify-between items-center hover:bg-gray hover:cursor-pointer hover:bg-opacity-40">
-                            <div className="mr-2 truncate max-w-[168px] select-none">{p.title}</div>
-                            <div className="cursor-pointer">
-                                <FaPlay/>
+                {tracks?.items &&
+                    <div className="app-attract rounded-2xl">
+                        {tracks.items.map(p => {
+                            return <div key={p.id}
+                                        onClick={() => {
+                                            audioPlayer.playTrack(p);
+                                        }}
+                                        data-playing={playingTrack?.id === p.id}
+                                        className="data-[playing=true]:bg-opacity-40 data-[playing=true]:bg-gray first:rounded-tr-2xl first:rounded-tl-2xl p-2 flex justify-between items-center hover:bg-gray hover:cursor-pointer hover:bg-opacity-40">
+                                <div className="mr-2 truncate max-w-[168px] select-none">{p.title}</div>
+                                <div className="cursor-pointer">
+                                    <FaPlay/>
+                                </div>
                             </div>
-                        </div>
-                    })}
-                </div>
+                        })}
+                    </div>
+                }
+
             </div>
         </div>
     );
