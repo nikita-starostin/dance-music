@@ -1,4 +1,15 @@
 ﻿export interface ILocaleStrings {
+    DancesKind: string;
+    Dance: string;
+    SingleDance: string;
+    Final: string;
+    BallroomSt: string;
+    BallroomLa: string;
+    Basic: string;
+    Advanced: string;
+    Pattern: string;
+    History: string;
+    TracksFilter: string;
     Saved: string;
     Avatar: string;
     ConfirmPassword: string;

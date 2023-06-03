@@ -5,11 +5,11 @@ import {FaFilter, FaUser} from "react-icons/fa";
 import AppRouting, {ClientRoutes} from "./appRouting";
 import {initSetLocation} from "./state/wouter.state";
 import {useLocalization} from "./state/localization.state";
-import {DanceTypeTranslations} from "./models";
 import {useAtom} from "jotai";
 import {filterAtom} from "./state/filter.state";
 import {useProfile} from "./api/hooks/useProfile";
 import {useIsAuth} from "./state/auth.state";
+import {TrackDanceTypeTranslations} from "./constants";
 
 
 export default function App() {
@@ -33,7 +33,7 @@ export default function App() {
                         </div>
                         <div
                             className="border-2 border-l-0 rounded-tr rounded-br box-border border-gray border-opacity-40 border-solid italic px-2 text-lg bg-opacity-30">
-                            {l(DanceTypeTranslations[filter.danceType])}
+                            {l(TrackDanceTypeTranslations[filter.trackDanceType])}
                             {filter.tags.length > 0 && `; ${filter.tags.join(',')}`}
                         </div>
                     </div>

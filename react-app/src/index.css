@@ -52,4 +52,20 @@
     .fixed-layout-container {
         @apply flex flex-col fixed h-full w-full items-center justify-center gradient-bg top-0 left-0;
     }
+
+    .tabs-container {
+        @apply app-attract w-[400px] mx-auto flex flex-col gap-5
+    }
+
+    .form-input-text {
+        @apply text-black px-4 py-2
+    }
+
+    .form-input-select {
+        @apply border border-white text-black text-sm rounded-lg p-2.5 ring-black
+    }
+
+    .form-fields {
+        @apply flex flex-col gap-2
+    }
 }

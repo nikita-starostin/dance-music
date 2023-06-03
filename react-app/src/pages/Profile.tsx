@@ -6,6 +6,8 @@ import {useEffect, useRef, useState} from "react";
 import {FaArrowLeft, FaCheck} from "react-icons/all";
 import {ClientRoutes, goToHome} from "../appRouting";
 import {Link} from "wouter";
+import {useOnBackspaceGoHome} from "../shared/hooks/useOnBackspaceGoHome";
+import Tabs from "../shared/components/Tabs";
 
 function useShowSavedForAWhile() {
     const [savedVisible, setSavedVisible] = useState(false);
@@ -46,18 +48,18 @@ function ProfileInfo() {
                     <FaArrowLeft/>
                 </div>
             </Link>
-            <form onSubmit={handleSubmit(updateProfile)} className="flex flex-col gap-2 app-attract p-5">
+            <form onSubmit={handleSubmit(updateProfile)} className="form-fields app-attract p-5">
                 <div className="form-field">
                     <label>{l('Name')}</label>
-                    <input className="text-black px-4 py-2" type="text" {...register('name')} />
+                    <input className="form-input-text" type="text" {...register('name')} />
                 </div>
                 <div className="form-field">
                     <label>{l('Email')}</label>
-                    <input className="text-black px-4 py-2" type="text" {...register('email')} />
+                    <input className="form-input-text" type="text" {...register('email')} />
                 </div>
                 <div className="form-field">
                     <label>{l('Avatar')}</label>
-                    <input className="text-black px-4 py-2" type="text" {...register('avatar')} />
+                    <input className="form-input-text" type="text" {...register('avatar')} />
                 </div>
                 <img src={getValues('avatar')} onLoad={() => {
                     setAvatarLoaded(true);
@@ -96,14 +98,14 @@ function SignInForm() {
             goToHome();
         }
     }
-    return <form onSubmit={handleSubmit(signIn)} className="p-5 pt-0 flex flex-col gap-2">
+    return <form onSubmit={handleSubmit(signIn)} className="p-5 pt-0 form-fields">
         <div className="form-field">
             <label>{l('Email')}</label>
-            <input className="text-black px-4 py-2" {...register('email')} type="text"/>
+            <input className="form-input-text" {...register('email')} type="text"/>
         </div>
         <div className="form-field">
             <label>{l('Password')}</label>
-            <input className="text-black px-4 py-2" {...register('password')} type="password"/>
+            <input className="form-input-text" {...register('password')} type="password"/>
         </div>
         <button className="btn-primary py-1 mt-2">{l('SignIn')}</button>
     </form>
@@ -136,22 +138,22 @@ function SignUpForm() {
     }
 
     return <div className="flex flex-col gap-2">
-        <form onSubmit={handleSubmit(signUp)} className="p-5 pt-0 flex flex-col gap-2">
+        <form onSubmit={handleSubmit(signUp)} className="p-5 pt-0 form-fields">
             <div className="form-field">
                 <label>{l('Name')}</label>
-                <input className="text-black px-4 py-2" {...register('name')} type="text"/>
+                <input className="form-input-text" {...register('name')} type="text"/>
             </div>
             <div className="form-field">
                 <label>{l('Email')}</label>
-                <input className="text-black px-4 py-2" {...register('email')} type="text"/>
+                <input className="form-input-text" {...register('email')} type="text"/>
             </div>
             <div className="form-field">
                 <label>{l('Password')}</label>
-                <input className="text-black px-4 py-2" {...register('password')} type="password"/>
+                <input className="form-input-text" {...register('password')} type="password"/>
             </div>
             <div className="form-field">
                 <label>{l('ConfirmPassword')}</label>
-                <input className="text-black px-4 py-2" {...register('confirmPassword')} type="password"/>
+                <input className="form-input-text" {...register('confirmPassword')} type="password"/>
             </div>
             <button className="btn-primary py-1 mt-2">{l('SignUp')}</button>
         </form>
@@ -160,7 +162,6 @@ function SignUpForm() {
 
 function SignInUpForm() {
     const {l} = useLocalization();
-    const [tab, setTab] = useState<'signIn' | 'signUp'>('signIn');
 
     return <div
         className="fixed-layout-container">
@@ -170,17 +171,19 @@ function SignInUpForm() {
                     <FaArrowLeft/>
                 </div>
             </Link>
-            <div className="app-attract w-[400px] mx-auto flex flex-col gap-5">
-                <div className="flex border-b-white border-b-2 border-b-solid">
-                    <button
-                        className="p-3 text-center w-[50%] data-[active=true]:underline data-[active=true]:app-attract cursor-pointer"
-                        data-active={tab === 'signIn'} onClick={() => setTab('signIn')}>{l('SignIn')}</button>
-                    <button
-                        className="p-3 text-center w-[50%] data-[active=true]:underline data-[active=true]:app-attract cursor-pointer"
-                        data-active={tab === 'signUp'} onClick={() => setTab('signUp')}>{l('SignUp')}</button>
-                </div>
-                {tab === 'signIn' && <SignInForm/>}
-                {tab === 'signUp' && <SignUpForm/>}
+            <div className="tabs-container">
+                <Tabs tabs={[
+                    {
+                        tabId: 'signIn',
+                        label: l('SignIn'),
+                        component: SignInForm
+                    },
+                    {
+                        tabId: 'signUp',
+                        label: l('SignUp'),
+                        component: SignUpForm
+                    }
+                ]}/>
             </div>
         </div>
     </div>
@@ -188,19 +191,7 @@ function SignInUpForm() {
 
 export default function Profile() {
     const {isAuth} = useIsAuth();
-
-    // on backspace go home
-    useEffect(() => {
-        const onKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'Backspace') {
-                goToHome();
-            }
-        }
-        document.addEventListener('keydown', onKeyDown);
-        return () => {
-            document.removeEventListener('keydown', onKeyDown);
-        }
-    });
+    useOnBackspaceGoHome();
 
     return isAuth ? <ProfileInfo/> : <SignInUpForm/>;
 }

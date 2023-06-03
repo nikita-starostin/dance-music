@@ -1,5 +1,52 @@
-﻿export const LocalStorageKeys = {
+﻿import {DancePattern, DanceType, TrackDanceType} from "./models";
+import {ILocaleStrings} from "./shared/localization/ILocaleStrings";
+
+export const LocalStorageKeys = {
     Auth: 'auth',
     Profile: 'profile',
     Profiles: 'profiles'
 }
+
+export const TrackDanceTypesByDanceType: Record<DanceType, TrackDanceType[]> = {
+    [DanceType.BallroomSt]: [
+        TrackDanceType.Waltz,
+        TrackDanceType.Tango,
+        TrackDanceType.VienneseWaltz,
+        TrackDanceType.Foxtrot,
+        TrackDanceType.Quickstep,
+    ],
+    [DanceType.BallroomLa]: [],
+}
+
+const ballroomPatterns = [
+    DancePattern.SingleDance,
+    DancePattern.Final,
+]
+
+export const DancePatternByDanceType: Record<DanceType, DancePattern[]> = {
+    [DanceType.BallroomSt]: ballroomPatterns,
+    [DanceType.BallroomLa]: ballroomPatterns,
+}
+
+export const DanceTypes = [
+    DanceType.BallroomSt,
+    DanceType.BallroomLa,
+];
+
+export const DancePatternTranslations: Record<DancePattern, keyof ILocaleStrings> = {
+    [DancePattern.SingleDance]: 'SingleDance',
+    [DancePattern.Final]: 'Final',
+}
+
+export const DanceTypesTranslations: Record<DanceType, keyof ILocaleStrings> = {
+    [DanceType.BallroomSt]: 'BallroomSt',
+    [DanceType.BallroomLa]: 'BallroomLa',
+}
+
+export const TrackDanceTypeTranslations: Record<TrackDanceType, keyof ILocaleStrings> = {
+    [TrackDanceType.Foxtrot]: 'Foxtrot',
+    [TrackDanceType.Waltz]: 'Waltz',
+    [TrackDanceType.Tango]: 'Tango',
+    [TrackDanceType.VienneseWaltz]: 'VienneseWaltz',
+    [TrackDanceType.Quickstep]: 'Quickstep',
+};

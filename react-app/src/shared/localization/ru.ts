@@ -2,6 +2,17 @@
 
 export const getRu = (): ILocaleStrings => {
     const ru: ILocaleStrings = {
+        DancesKind: "Вид танцев",
+        Dance: "Танец",
+        SingleDance: "Одиночный танец",
+        Final: "Финал",
+        BallroomLa: "Бальные танцы - Латина",
+        BallroomSt: "Бальные танцы - Стандарт",
+        Basic: "Базовый",
+        Advanced: "Расширенный",
+        Pattern: "Паттерн",
+        History: "История",
+        TracksFilter: "Фильтр треков",
         Saved: "Сохранено",
         Avatar: "Аватар",
         Name: "Имя",

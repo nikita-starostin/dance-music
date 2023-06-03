@@ -1,34 +1,26 @@
-import {ILocaleStrings} from "./shared/localization/ILocaleStrings";
-
 export enum DanceType {
-  Waltz = 'Waltz',
-  Tango = 'Tango',
-  VienneseWaltz = 'VienneseWaltz',
-  Foxtrot = 'Foxtrot',
-  Quickstep = 'Quickstep'
+    BallroomSt = 'BallroomSt',
+    BallroomLa = 'BallroomLa'
 }
 
-export const DanceTypes = [
-  DanceType.Foxtrot,
-  DanceType.Waltz,
-  DanceType.Tango,
-  DanceType.VienneseWaltz,
-  DanceType.Quickstep,
-];
+export enum DancePattern {
+    SingleDance = 'SingleDance',
+    Final = 'Final',
+}
 
-export const DanceTypeTranslations: Record<DanceType, keyof ILocaleStrings> = {
-  [DanceType.Foxtrot]: 'Foxtrot',
-  [DanceType.Waltz]: 'Waltz',
-  [DanceType.Tango]: 'Tango',
-  [DanceType.VienneseWaltz]: 'VienneseWaltz',
-  [DanceType.Quickstep]: 'Quickstep',
-};
+export enum TrackDanceType {
+    Waltz = 'Waltz',
+    Tango = 'Tango',
+    VienneseWaltz = 'VienneseWaltz',
+    Foxtrot = 'Foxtrot',
+    Quickstep = 'Quickstep'
+}
 
 export interface ITrack {
-  id: string;
-  title: string;
-  danceType: DanceType;
-  url: string;
-  tags: string[];
-  artist: string;
+    id: string;
+    title: string;
+    danceType: TrackDanceType;
+    url: string;
+    tags: string[];
+    artist: string;
 }

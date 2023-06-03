@@ -122,7 +122,7 @@ const audioPlayer = new AudioPlayer();
 export default function Playlist() {
     const filter = useAtomValue(filterAtom);
     const trackUrl = getUrlWithQueryParams(Urls.Tracks, {
-        danceType: filter.danceType,
+        danceType: filter.trackDanceType,
         tags: filter.tags.join(',')
     })
     const {data: tracks} = useRemote<{ items: ITrack[] }>(trackUrl);
