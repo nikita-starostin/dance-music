@@ -189,63 +189,12 @@ param primaryRegion string = 'eastus'
 @description('The secondary region for the Azure Cosmos DB account.')
 param secondaryRegion string = 'eastus2'
 
-@allowed([
-  'Eventual'
-  'ConsistentPrefix'
-  'Session'
-  'BoundedStaleness'
-  'Strong'
-])
-@description('The default consistency level of the Cosmos DB account.')
-param defaultConsistencyLevel string = 'Session'
-
-@minValue(10)
-@maxValue(2147483647)
-@description('Max stale requests. Required for BoundedStaleness. Valid ranges, Single Region: 10 to 2147483647. Multi Region: 100000 to 2147483647.')
-param maxStalenessPrefix int = 100000
-
-@minValue(5)
-@maxValue(86400)
-@description('Max lag time (minutes). Required for BoundedStaleness. Valid ranges, Single Region: 5 to 84600. Multi Region: 300 to 86400.')
-param maxIntervalInSeconds int = 300
-
-@allowed([
-  true
-  false
-])
-@description('Enable system managed failover for regions')
-param systemManagedFailover bool = true
-
 @description('The name for the database')
 param cosmosDbName string = environment
 
 @description('The name for the container')
 param tracksContainerName string = '${environment}Tracks'
 
-@minValue(400)
-@maxValue(1000000)
-@description('The throughput for the container')
-param throughput int = 4000
-
-var consistencyPolicy = {
-  Eventual: {
-    defaultConsistencyLevel: 'Eventual'
-  }
-  ConsistentPrefix: {
-    defaultConsistencyLevel: 'ConsistentPrefix'
-  }
-  Session: {
-    defaultConsistencyLevel: 'Session'
-  }
-  BoundedStaleness: {
-    defaultConsistencyLevel: 'BoundedStaleness'
-    maxStalenessPrefix: maxStalenessPrefix
-    maxIntervalInSeconds: maxIntervalInSeconds
-  }
-  Strong: {
-    defaultConsistencyLevel: 'Strong'
-  }
-}
 var locations = [
   {
     locationName: primaryRegion
@@ -264,10 +213,12 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2022-05-15' = {
   location: location
   kind: 'GlobalDocumentDB'
   properties: {
-    consistencyPolicy: consistencyPolicy[defaultConsistencyLevel]
+    enableFreeTier: true
+    consistencyPolicy: {
+      defaultConsistencyLevel: 'Session'
+    }
     locations: locations
     databaseAccountOfferType: 'Standard'
-    enableAutomaticFailover: systemManagedFailover
   }
 }
 
@@ -277,6 +228,9 @@ resource cosmosDb 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2022-05-15
   properties: {
     resource: {
       id: cosmosDbName
+    }
+    options: {
+      throughput: 1000
     }
   }
 }
@@ -319,9 +273,6 @@ resource tracksContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/con
           }
         ]
       }
-    }
-    options: {
-      throughput: throughput
     }
   }
 }
