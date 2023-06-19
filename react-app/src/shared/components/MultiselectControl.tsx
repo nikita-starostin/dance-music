@@ -1,13 +1,34 @@
-﻿import {FieldPath, FieldValues, UseFormStateReturn} from "react-hook-form/dist/types";
-import {ControllerFieldState, ControllerRenderProps} from "react-hook-form/dist/types/controller";
+﻿import {FieldPath, FieldValues} from "react-hook-form/dist/types";
 import React, {useState} from "react";
 import {FaPlus} from "react-icons/all";
 import {useLocalization} from "../../state/localization.state";
+import {IControlProps} from "./IControlProps";
 
-export interface IControlProps<TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>> {
-    field: ControllerRenderProps<TFieldValues, TName>;
-    fieldState: ControllerFieldState;
-    formState: UseFormStateReturn<TFieldValues>;
+function TextInput<TName extends string, TFieldValues>({tag, name, setTag, onChange, selectedValues}: {
+    tag: string,
+    name: TName,
+    setTag: (value: (((prevState: string) => string) | string)) => void,
+    onChange: (...event: any[]) => void,
+    selectedValues: string[]
+}) {
+    return <>
+        <div className="relative">
+            <input
+                className="form-input-text"
+                value={tag}
+                id={name}
+                onInput={e => setTag(e.currentTarget.value)}
+                onChange={e => setTag(e.target.value)}/>
+        </div>
+        <button type="button"
+                className="btn-secondary"
+                onClick={() => {
+                    if (!tag) return;
+                    onChange([...selectedValues, tag]);
+                    setTag('');
+                }}><FaPlus/>
+        </button>
+    </>
 }
 
 export default function MultiselectControl<TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>
@@ -24,27 +45,6 @@ export default function MultiselectControl<TFieldValues extends FieldValues, TNa
     const {l} = useLocalization();
     const selectedValues = value as string[] || [];
     const [tag, setTag] = useState<string>('');
-
-    const TextInput = () => {
-        return <>
-            <div className="relative">
-                <input
-                    className="form-input-text"
-                    value={tag}
-                    id={name}
-                    onInput={e => setTag(e.currentTarget.value)}
-                    onChange={e => () => setTag(e.target.value)}/>
-            </div>
-            <button type="button"
-                    className="btn-secondary"
-                    onClick={() => {
-                        if (!tag) return;
-                        onChange([...selectedValues, tag]);
-                        setTag('');
-                    }}><FaPlus/>
-            </button>
-        </>
-    }
 
     const SelectInput = () => {
         const notSelectedItems = items!.filter(p => !selectedValues.includes(p.value));
@@ -63,7 +63,8 @@ export default function MultiselectControl<TFieldValues extends FieldValues, TNa
 
     return <div className="w-full">
         <div className="flex items-center gap-1">
-            {items ? <SelectInput/> : <TextInput/>}
+            {items ? <SelectInput/> :
+                <TextInput tag={tag} setTag={setTag} name={name} onChange={onChange} selectedValues={selectedValues}/>}
         </div>
         <div className="flex gap-2">
             {selectedValues.map((p, i) => <div key={i}

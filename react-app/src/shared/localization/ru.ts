@@ -2,8 +2,11 @@
 
 export const getRu = (): ILocaleStrings => {
     const ru: ILocaleStrings = {
+        Phases: "Фазы",
+        Delete: "Удалить",
+        New: "Новый",
         TracksCount: "Количество треков",
-        AverateTrackDurationS: "Средняя длительность трека (секунды)",
+        AverageTrackDurationS: "Средняя длительность трека (секунды)",
         TotalPlaylistDurationS: "Общая длительность плейлиста (секунды)",
         Rating: "Рейтинг",
         Collections: "Коллекции",

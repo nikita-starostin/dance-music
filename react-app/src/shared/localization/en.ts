@@ -2,8 +2,11 @@
 
 export const getEn = (): ILocaleStrings => {
     const en: ILocaleStrings = {
+        Phases: "Phases",
+        Delete: "Delete",
+        New: "New",
         TracksCount: "Tracks count",
-        AverateTrackDurationS: "Averate track duration (seconds)",
+        AverageTrackDurationS: "Averate track duration (seconds)",
         TotalPlaylistDurationS: "Total playlist duration (seconds)",
         Rating: "Rating",
         Collections: "Collections",

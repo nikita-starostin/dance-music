@@ -1,6 +1,9 @@
 ﻿export interface ILocaleStrings {
+    Phases: string;
+    Delete: string;
+    New: string;
     TracksCount: string;
-    AverateTrackDurationS: string;
+    AverageTrackDurationS: string;
     TotalPlaylistDurationS: string;
     Rating: string;
     Collections: string;

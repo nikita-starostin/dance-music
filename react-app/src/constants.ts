@@ -5,7 +5,8 @@ export const LocalStorageKeys = {
     Auth: 'auth',
     Profile: 'profile',
     Profiles: 'profiles',
-    Filter: 'filter'
+    Filter: 'filter',
+    Patterns: 'patterns'
 }
 
 export const TrackDanceTypesByDanceType: Record<DanceType, TrackDanceType[]> = {

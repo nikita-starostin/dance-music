@@ -1,6 +1,6 @@
 export enum DanceType {
     BallroomSt = 'BallroomSt',
-    BallroomLa = 'BallroomLa'
+    BallroomLa = 'BallroomLa',
 }
 
 export enum DancePattern {

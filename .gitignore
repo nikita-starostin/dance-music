@@ -1,2 +1,4 @@
 ﻿# used for local debug purposes
 vs
+.vscode
+.idea

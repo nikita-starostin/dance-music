@@ -38,11 +38,16 @@ const localizationAtom = atom(getLocalization('ru'))
 
 export function useLocalization(): {
     l: (key: keyof ILocaleStrings) => string,
+    lOrKey: (key: string) => string,
     setLocale: (locale: AvailableLocalesType) => void
 } {
     const [localization, setLocalization] = useAtom(localizationAtom);
     return {
-        l: (key: keyof ILocaleStrings) => localization.strings[key],
+        l: (key: keyof ILocaleStrings) => localization.strings[key] || '',
+        lOrKey: (key: string) => {
+            const keyOrString = key as keyof ILocaleStrings;
+            return localization.strings[keyOrString] || keyOrString;
+        },
         setLocale: (locale: AvailableLocalesType) => {
             setLocalization(getLocalization(locale));
         }

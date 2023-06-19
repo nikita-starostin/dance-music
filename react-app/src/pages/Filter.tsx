@@ -1,26 +1,28 @@
-﻿import React, {useRef} from "react";
-import {filterAtom, FilterKindType, IFilter, IgnoredFieldsByDancePattern} from "../state/filter.state";
-import {Control, Controller, RegisterOptions, useForm, UseFormRegisterReturn} from "react-hook-form";
+﻿import React, {useRef, useState} from "react";
+import {filterAtom, FilterKindType, IFilter} from "../state/filter.state";
+import {Control, Controller, useFieldArray, useForm} from "react-hook-form";
 import {useLocalization} from "../state/localization.state";
 import {ClientRoutes, goToHome} from "../appRouting";
 import {useAtomValue, useSetAtom} from "jotai";
 import {useOnBackspaceGoHome} from "../shared/hooks/useOnBackspaceGoHome";
 import {Link} from "wouter";
-import {FaArrowLeft} from "react-icons/all";
+import {FaArrowLeft, FaEdit} from "react-icons/all";
 import Tabs from "../shared/components/Tabs";
 import {
-    DancePatternByDanceType,
-    DancePatternTranslations,
     DanceTypes,
-    DanceTypesTranslations, ListenedBeforeTranslations, TiersTranslations,
+    DanceTypesTranslations,
+    ListenedBeforeTranslations,
+    TiersTranslations,
     TrackDanceTypesByDanceType,
     TrackDanceTypeTranslations
 } from "../constants";
-import {Artist, DanceType, ListenedBefore, Tags, Tier} from "../models";
-import MultiselectControl, {IControlProps} from "../shared/components/MultiselectControl";
-import {FieldValues} from "react-hook-form/dist/types";
+import {Artist, DanceType, ListenedBefore, Tags, Tier, TrackDanceType} from "../models";
+import MultiselectControl from "../shared/components/MultiselectControl";
+import {FieldPath, FieldValues} from "react-hook-form/dist/types";
 import {UseFormRegister} from "react-hook-form/dist/types/form";
 import SelectControl from "../shared/components/SelectControl";
+import {IPattern, patternsAtom, patternTitlesAtom, usePatternActions} from "../state/patterns.state";
+import {IControlProps} from "../shared/components/IControlProps";
 
 function ListenedBeforeControl(props: IControlProps<IFilter, keyof IFilter>) {
     const {l} = useLocalization();
@@ -53,7 +55,6 @@ function TiersControl(props: IControlProps<IFilter, keyof IFilter>) {
 }
 
 function CollectionsControl(props: IControlProps<IFilter, keyof IFilter>) {
-    const {l} = useLocalization();
     const collections = ['Collection 1', 'Collection 2'].map(p => ({value: p, label: p}));
 
     return <>
@@ -80,14 +81,34 @@ function DanceTypesOptions() {
 }
 
 function DancePatternOptions({danceType}: { danceType: DanceType }) {
-    const {l} = useLocalization();
-    const dancePatterns = DancePatternByDanceType[danceType];
+    const {lOrKey} = useLocalization();
+    const dancePatternTitles = useAtomValue(patternTitlesAtom);
+    const dancePatternTitlesForDanceType = dancePatternTitles
+        .filter(p => p.danceTypes.includes(danceType))
+        .map(p => p.title);
 
     return <>
-        {dancePatterns.map(p => {
-            return <option key={p} value={p}>{l(DancePatternTranslations[p])}</option>
+        {dancePatternTitlesForDanceType.map(p => {
+            return <option key={p} value={p}>{lOrKey(p)}</option>
         })}
     </>
+}
+
+function TrackDanceTypesControl(props: IControlProps<IPattern, `phases.${number}.value.trackDanceTypes`>) {
+    const {l} = useLocalization();
+    const trackDanceTypes = [
+        TrackDanceType.Waltz,
+        TrackDanceType.Tango,
+        TrackDanceType.VienneseWaltz,
+        TrackDanceType.Foxtrot,
+        TrackDanceType.Quickstep
+    ];
+
+    return <>
+        <MultiselectControl {...props}
+                            items={trackDanceTypes.map(p => ({value: p, label: l(TrackDanceTypeTranslations[p])}))}/>
+    </>
+
 }
 
 function TrackDanceTypesOptions({danceType}: { danceType: DanceType }) {
@@ -104,6 +125,7 @@ function TrackDanceTypesOptions({danceType}: { danceType: DanceType }) {
 function BasicFilter() {
     const {l} = useLocalization();
     const setFilter = useSetAtom(filterAtom);
+    const patterns = useAtomValue(patternsAtom);
     const initialFilter = useRef(useAtomValue(filterAtom));
     const {register, watch, handleSubmit} = useForm({
         defaultValues: initialFilter.current,
@@ -117,11 +139,15 @@ function BasicFilter() {
         goToHome();
     };
 
-    const selectedDanceType = watch('danceType');
-    const selectedDancePattern = watch('dancePattern');
-    const shouldIgnoreTrackDanceType = IgnoredFieldsByDancePattern[selectedDancePattern].includes('trackDanceType');
+    const formValues = watch();
+    const pattern = patterns.find(p => p.title === formValues.dancePattern);
+    if (!pattern) {
+        return <></>;
+    }
 
-    return <form className="form-fields p-5 pt-0" onSubmit={handleSubmit(save)}>
+    const shouldIgnoreTrackDanceType = pattern.ignoreFields.includes('trackDanceType');
+
+    return <form className="p-5 pt-0 form-fields" onSubmit={handleSubmit(save)}>
         <div className="form-field">
             <label>{l('DancesKind')}</label>
             <select {...register('danceType')} className="form-input-select">
@@ -131,16 +157,16 @@ function BasicFilter() {
         <div className="form-field">
             <label>{l('Pattern')}</label>
             <select {...register('dancePattern')} className="form-input-select">
-                <DancePatternOptions danceType={selectedDanceType}/>
+                <DancePatternOptions danceType={formValues.danceType}/>
             </select>
         </div>
         {!shouldIgnoreTrackDanceType && <div className="form-field">
             <label>{l('Dance')}</label>
             <select {...register('trackDanceType')} className="form-input-select">
-                <TrackDanceTypesOptions danceType={selectedDanceType}/>
+                <TrackDanceTypesOptions danceType={formValues.danceType}/>
             </select>
         </div>}
-        <button className="btn-primary mt-2">{l('Save')}</button>
+        <button className="mt-2 btn-primary">{l('Save')}</button>
     </form>
 }
 
@@ -168,7 +194,7 @@ function TextField({register, formValues, fieldName, fieldNameEnabled, label}: {
 function SelectField({register, formValues, control, fieldName, fieldNameEnabled, label, fieldControl}: {
     register: UseFormRegister<IFilter>,
     formValues: FieldValues,
-    control: Control<IFilter, any>,
+    control: Control<IFilter, IFilter>,
     fieldName: keyof IFilter,
     fieldNameEnabled: keyof IFilter,
     label: string,
@@ -194,7 +220,7 @@ function SelectField({register, formValues, control, fieldName, fieldNameEnabled
 function ArrayField({register, formValues, control, fieldName, fieldNameEnabled, label, fieldControl}: {
     register: UseFormRegister<IFilter>,
     formValues: FieldValues,
-    control: Control<IFilter, any>,
+    control: Control<IFilter, IFilter>,
     fieldName: keyof IFilter,
     fieldNameEnabled: keyof IFilter,
     label: string,
@@ -219,6 +245,7 @@ function ArrayField({register, formValues, control, fieldName, fieldNameEnabled,
 function AdvancedFilter() {
     const {l} = useLocalization();
     const setFilter = useSetAtom(filterAtom);
+    const patterns = useAtomValue(patternsAtom);
     const initialFilter = useRef(useAtomValue(filterAtom));
     const {register, watch, handleSubmit, control} = useForm({
         values: initialFilter.current,
@@ -233,9 +260,14 @@ function AdvancedFilter() {
     };
 
     const formValues = watch();
-    const shouldIgnoreTrackDanceType = IgnoredFieldsByDancePattern[formValues.dancePattern].includes('trackDanceType');
+    const pattern = patterns.find(p => p.title === formValues.dancePattern);
+    if (!pattern) {
+        return <></>;
+    }
 
-    return <form className="form-fields p-5 pt-0" onSubmit={handleSubmit(save)}>
+    const shouldIgnoreTrackDanceType = pattern.ignoreFields.includes('trackDanceType');
+
+    return <form className="p-5 pt-0 form-fields" onSubmit={handleSubmit(save)}>
         <div className="form-field">
             <label>{l('DancesKind')}</label>
             <select {...register('danceType')} className="form-input-select">
@@ -281,7 +313,7 @@ function AdvancedFilter() {
                      fieldName={'listenedBefore'}
                      fieldNameEnabled={'listenedBeforeEnabled'}
                      label={l('ListenedBefore')}
-                     fieldControl={TiersControl}/>
+                     fieldControl={ListenedBeforeControl}/>
         <ArrayField register={register}
                     formValues={formValues}
                     control={control}
@@ -297,7 +329,7 @@ function AdvancedFilter() {
                    formValues={formValues}
                    fieldName={'averageTrackDurationS'}
                    fieldNameEnabled={'averageTrackDurationEnabled'}
-                   label={l('AverateTrackDurationS')}/>
+                   label={l('AverageTrackDurationS')}/>
         <TextField register={register}
                    formValues={formValues}
                    fieldName={'totalPlayListDurationS'}
@@ -308,12 +340,114 @@ function AdvancedFilter() {
                    fieldName={'rating'}
                    fieldNameEnabled={'ratingEnabled'}
                    label={l('Rating')}/>
-        <button className="btn-primary mt-2">{l('Save')}</button>
+        <button className="mt-2 btn-primary">{l('Save')}</button>
     </form>
 }
 
 function Pattern() {
-    return <div>Pattern</div>
+    const {l} = useLocalization();
+    const {
+        patterns,
+        addPattern,
+        removePattern,
+        updatePattern
+    } = usePatternActions();
+    const initialFilter = useRef(patterns[0]);
+    const {register, watch, handleSubmit, control, reset, setValue} = useForm<IPattern>({
+        values: initialFilter.current,
+    });
+    const [activePhaseIndex, setActivePhaseIndex] = useState<number>(0);
+
+    const submit = (pattern: IPattern) => {
+        if (pattern.id) {
+            updatePattern(pattern);
+        } else {
+            addPattern(pattern);
+        }
+    }
+
+    const setFormWithExistingPatternFromTitle = (title: string) => {
+        const pattern = patterns.find(p => p.title === title);
+        reset(pattern);
+        setActivePhaseIndex(0);
+    }
+
+    const setFormWithEmptyPattern = () => {
+        reset({
+            title: '',
+            canBeDeleted: true,
+            phases: [],
+            danceTypes: [],
+            ignoreFields: [],
+        });
+        setActivePhaseIndex(0);
+    }
+
+    const addPhase = () => {
+        setValue('phases', [...formValues.phases, {
+            title: '',
+            value: {
+                trackDanceTypes: [],
+            }
+        }]);
+        setActivePhaseIndex(formValues.phases.length);
+    }
+
+    const patternTitles = patterns.map(p => p.title);
+
+    const formValues = watch();
+
+    const currentPatternCanBeDeleted = (formValues.id && formValues.canBeDeleted);
+
+    // @ts-ignore
+    // @ts-ignore
+    return <form className="p-5 pt-0 form-fields" onSubmit={handleSubmit(submit)}>
+        <div className="form-field">
+            <label>{l('Pattern')}</label>
+            <div className="flex gap-2">
+                <select className="form-input-select" onChange={(e) => {
+                    setFormWithExistingPatternFromTitle(e.target.value)
+                }}>
+                    {patternTitles.map(title => <option key={title} value={title}>{title}</option>)}
+                </select>
+                <button className="btn-primary" onClick={setFormWithEmptyPattern}>{l('New')}</button>
+                {currentPatternCanBeDeleted && <button className="btn-secondary"
+                                                       onClick={() => removePattern(formValues.id)}>{l('Delete')}</button>}
+            </div>
+        </div>
+        <div className="form-field">
+            <label>{l('Title')}</label>
+            <input className="form-input-text" {...register('title')} type="text"/>
+        </div>
+        <div className="form-field">
+            <label>{l('DanceType')}</label>
+            <Controller render={props => <MultiselectControl {...props}/>} name={'danceTypes'} control={control}/>
+        </div>
+        <label>{l('Phases')}</label>
+        <div className="flex gap-3">
+            <div className="flex flex-col border-b-white border-b-2 border-b-solid w-[300px]">
+                {formValues.phases.map((phase, index) => (
+                    <div key={index}
+                         className="p-3 flex items-center gap-2 cursor-pointer"
+                         data-active={index === activePhaseIndex}>
+                        <input className="form-input-text w-[100%]"
+                               type="text" {...register(`phases.${index}.title`)} />
+                        <div onClick={() => setActivePhaseIndex(index)}><FaEdit/></div>
+                    </div>
+                ))}
+                <button type="button" className="btn-secondary" onClick={() => addPhase()}>{l('Add')}</button>
+            </div>
+            <div className="flex flex-col gap-2 w-[100%]">
+                <div className="form-field">
+                    <label>{l('DanceType')}</label>
+                    <Controller render={TrackDanceTypesControl}
+                                name={`phases.${activePhaseIndex}.value.trackDanceTypes`} control={control}/>
+                </div>
+            </div>
+        </div>
+
+        <button className="mt-2 btn-primary">{l('Save')}</button>
+    </form>
 }
 
 function History() {
@@ -334,13 +468,13 @@ export default function Filter() {
         <div className="flex flex-col gap-2">
             <div className="flex gap-2">
                 <Link to={ClientRoutes.Home}>
-                    <div role="button" className="cursor-pointer text-2xl">
+                    <div role="button" className="text-2xl cursor-pointer">
                         <FaArrowLeft/>
                     </div>
                 </Link>
                 {l('TracksFilter')}
             </div>
-            <div className="tabs-container h-[700px] max-h-[700px] pb-3 overflow-auto overflow-x-hidden">
+            <div className="tabs-container min-w-[500px] h-[700px] max-h-[700px] pb-3 overflow-auto overflow-x-hidden">
                 <Tabs initialIndex={initialTabIndexRef.current}
                       tabs={[
                           {tabId: 'standard', component: BasicFilter, label: l('Basic')},
