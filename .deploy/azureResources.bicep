@@ -21,16 +21,6 @@ resource demohosterSA 'Microsoft.Storage/storageAccounts@2022-09-01' = {
   }
 }
 
-resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
-  name: '${environment}-application-insights'
-  location: location
-  kind: 'web'
-  properties: {
-    Application_Type: 'web'
-    Request_Source: 'rest'
-  }
-}
-
 resource demohosterHostingPlan 'Microsoft.Web/serverfarms@2021-03-01' = {
   name: '${environment}-demohoster2-hosting-plan'
   location: hostingPlanLocation
@@ -53,14 +43,6 @@ resource demohosterFA 'Microsoft.Web/sites@2022-09-01' = {
     serverFarmId: demohosterHostingPlan.id
     siteConfig: {
       appSettings: [
-        {
-          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-          value: applicationInsights.properties.InstrumentationKey
-        }
-        {
-          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-          value: applicationInsights.properties.ConnectionString
-        }
         {
           name: 'AzureWebJobsFeatureFlags'
           value: 'EnableWorkerIndexing'
