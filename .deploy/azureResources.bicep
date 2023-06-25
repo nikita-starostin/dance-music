@@ -258,19 +258,3 @@ resource tracksContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/con
     }
   }
 }
-
-param ADLocation string = 'europe'
-resource activeDirectoryB2C 'Microsoft.AzureActiveDirectory/b2cDirectories@2023-01-18-preview' = {
-  name: '${environment}aadb2cd.onmicrosoft.com'
-  location: ADLocation
-  sku: {
-    name: 'Standard'
-    tier: 'A0'
-  }
-  properties: {
-   createTenantProperties: {
-    displayName: '${environment}-dance-music-ad-tenant'
-    countryCode: 'DE'
-   } 
-  }
-}
