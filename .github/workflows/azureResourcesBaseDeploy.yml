@@ -14,6 +14,7 @@ on:
       AZURE_SUBSCRIPTION_ID:
         description: 'Azure subscription id'
         required: true
+        
 jobs:
   deploy:
     runs-on: ubuntu-latest
