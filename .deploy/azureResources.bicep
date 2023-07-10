@@ -25,7 +25,7 @@ resource demohosterHostingPlan 'Microsoft.Web/serverfarms@2021-03-01' = {
   name: '${environment}-demohoster2-hosting-plan'
   location: hostingPlanLocation
   sku: {
-    name: 'Y1'
+    name: 'F1'
   }
   properties: {}
 }
